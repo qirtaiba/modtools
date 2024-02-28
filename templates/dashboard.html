@@ -1,0 +1,352 @@
+{% extends "base.html" %} {% block title %}Sample{% endblock %}
+
+{% block content %}
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<div class="container-fluid">
+
+    <div class="d-flex align-items-center justify-content-between mb-4">
+        <div class="d-flex align-items-center">
+            <!-- Header -->
+            <h1 class="h3 mb-0 text-gray-800">{{dashboard_name}}</h1>
+        </div>
+
+        <!-- Filter Button -->
+        <button class="btn btn-primary ml-2" onclick="toggleFilterSection()">Open Filters</button>
+    </div>
+
+    <!-- Filter Section -->
+    <div class="container my-3" id="filterSection" style="display: none; width: 100%;">
+        <div class="form-group">
+            <label for="usernameInput">Username:</label>
+            <input type="text" class="form-control" id="usernameInput">
+        </div>
+
+        <div class="form-group">
+            <label for="dateInput">Date:</label>
+            <input type="date" class="form-control" id="dateInput">
+        </div>
+
+        <div class="form-group">
+            <label>Plugins:</label>
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="resultCheckbox">
+                <label class="form-check-label" for="resultCheckbox">Has Result</label>
+            </div>
+        </div>
+
+        <button class="btn btn-success" onclick="applyFilters()">Apply Filters</button>
+    </div>
+
+
+
+    <!-- Begin Page Content -->
+    <div class="row">
+
+        <!-- Area Chart -->
+        {% for image in images %}
+        <div class="col-xl-4 col-lg-5">
+            <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+
+                    <div class="col-xl-8 col-lg-7">
+                        <h6 class="m-0 font-weight-bold text-primary">Result: {{ image.scan_results }} </h6>
+
+                    </div>
+                    <!-- Actions Button -->
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                            Actions
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" id="checkboxDropdown">
+                            <div class="dropdown-header">Select Actions</div>
+
+                            {% for plugin in plugins %}
+                            <div class="dropdown-item" onclick="toggleCheckbox('{{ plugin.action_id }}_{{image.id}}')">
+                                <input type="checkbox" id="{{ plugin.action_id }}_{{image.id}}">
+                                <label for="{{ plugin.action_id }}_{{image.id}}">{{ plugin.name }}</label>
+                            </div>
+                            {% endfor %}
+
+                            <div class="dropdown-divider"></div> <!-- Divider below the header -->
+                            <button id="action-button" class="dropdown-item text-center bg-primary"
+                                onclick="performeActions()">
+                                Take Actions
+                            </button>
+                        </div>
+                    </div>
+
+
+
+                </div>
+                <!-- Card Body -->
+                <div class="card-body">
+                    <img style="max-width: 100%; height: auto;"
+                        src="{{ url_for('static',  filename='img/' + image.image_url) }}" alt="Image" class="mb-4">
+                    <div class="button-container">
+                        <a href="" class="btn btn-success btn-icon-split approve-button" data-image-id="{{ image.id }}">
+                            <span class="icon text-white-50">
+                                <i class="fas fa-check"></i>
+                            </span>
+                            <span class="text">Approve</span>
+                        </a>
+
+                        <a href="" class="btn btn-danger btn-icon-split dismiss-button" data-image-id="{{ image.id }}">
+                            <span class="icon text-white-50">
+                                <i class="fas fa-trash"></i>
+                            </span>
+                            <span class="text">Dismiss</span>
+                        </a>
+
+                        {% if image.status != 'Escalate' %}
+                        <a href="" class="btn btn-warning btn-icon-split escalate-button"
+                            data-image-id="{{ image.id }}">
+                            <span class="icon text-white-50">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </span>
+                            <span class="text">Escalate</span>
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        {% endfor%}
+
+
+
+    </div>
+    <!-- /.container-fluid -->
+
+</div>
+<!-- End of Main Content -->
+</div>
+
+<script>
+    // Add event listener to Dismiss button
+    $('.dismiss-button').click(function (event) {
+        event.preventDefault();
+
+        const imageId = $(this).data('image-id');
+        const card = $(this).closest('.card');
+        console.log(imageId);
+        // AJAX request
+        $.ajax({
+            type: 'POST',
+            url: '/dismiss', // Replace with your server endpoint
+            data: { image_id: imageId },
+            success: function (response) {
+                // Handle the response if needed
+                // For example, you can remove the card here
+                card.hide();
+            },
+            error: function (xhr, status, error) {
+                console.error(error);
+            }
+        });
+    });
+    $('.escalate-button').click(function (event) {
+        event.preventDefault();
+
+        const imageId = $(this).data('image-id');
+        const card = $(this).closest('.card');
+        console.log(imageId);
+        // AJAX request
+        $.ajax({
+            type: 'POST',
+            url: '/escalate', // Replace with your server endpoint
+            data: { image_id: imageId },
+            success: function (response) {
+                // Handle the response if needed
+                // For example, you can remove the card here
+                card.hide();
+            },
+            error: function (xhr, status, error) {
+                console.error(error);
+            }
+        });
+    });
+    $('.approve-button').click(function (event) {
+        event.preventDefault();
+
+        const imageId = $(this).data('image-id');
+        const card = $(this).closest('.card');
+        // AJAX request
+        $.ajax({
+            type: 'POST',
+            url: '/approve', // Replace with your server endpoint
+            data: { image_id: imageId },
+            success: function (response) {
+                // Handle the response if needed
+                // For example, you can remove the card here
+                card.hide();
+            },
+            error: function (xhr, status, error) {
+                console.error(error);
+            }
+        });
+    });
+    function toggleCheckbox(checkboxId) {
+        const checkbox = document.getElementById(checkboxId);
+        checkbox.checked = !checkbox.checked;
+        event.stopPropagation();
+        event.target.classList.remove('active');
+    }
+
+    function performeActions() {
+        const checkboxes = document.querySelectorAll('#checkboxDropdown input[type="checkbox"]:checked');
+        const selectedActions = Array.from(checkboxes).map(checkbox => checkbox.id);
+
+        // Send selected actions to Flask route
+        fetch('/perform_actions', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ selected_actions: selectedActions }),
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const dashboardName = 'Actions performed successfully'
+
+                    // Update the dashboard name
+                    $(document).ready(function () {
+                        $('h1.text-gray-800').text(dashboardName);
+                    });
+                    // Uncheck all checkboxes
+                    checkboxes.forEach(checkbox => {
+                        checkbox.checked = false;
+                    });
+                } else {
+                    console.error('Failed to perform actions.');
+                }
+            })
+            .catch(error => console.error('Error performing actions:', error));
+    }
+    function toggleFilterSection() {
+        $('#filterSection').toggle();
+    }
+
+    function getEscalatedFromUrl() {
+        const currentUrl = window.location.href;
+        return currentUrl.includes('/escalated_images');
+    }
+
+    function applyFilters() {
+        // Retrieve values from input fields and checkboxes
+        const username = $('#usernameInput').val();
+        const date = $('#dateInput').val();
+        const result = $('#resultCheckbox').prop('checked');
+        const escalated = getEscalatedFromUrl();
+
+        // Make AJAX request to the /filter_images endpoint
+        $.ajax({
+            type: 'POST',
+            url: '/filter_images',
+            data: {
+                username: username,
+                date: date,
+                result: result,
+                escalated: escalated,
+            },
+            success: function (response) {
+                console.log('Filtered images:', response);
+                updatePageContent(response.images);
+            },
+            error: function (xhr, status, error) {
+                console.error('Error applying filters:', error);
+            }
+        });
+        toggleFilterSection();
+    }
+
+    function updatePageContent(images) {
+        const dashboardName = "Filtered Images";
+
+        // Update the dashboard name
+        $('h1.text-gray-800').text(dashboardName);
+
+        // Clear existing images
+        $('.row').empty();
+
+        images.forEach(image => {
+            const imageUrl = image.image_url;
+            const completeUrl = 'static/img/' + imageUrl;
+            const card = `
+            <div class="col-xl-4 col-lg-5">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <div class="col-xl-8 col-lg-7">
+                            <h6 class="m-0 font-weight-bold text-primary">Result: ${image.scan_results}</h6>
+                        </div>
+                        <!-- Actions Button -->
+                        <div class="btn-group">
+                            <!-- Your existing code for actions button here -->
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <img style="max-width: 100%; height: auto;"
+                            src="${completeUrl}" alt="Image" class="mb-4">
+                        <div class="button-container">
+                            <!-- Your existing buttons for Approve, Dismiss, Escalate here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+            $('.row').append(card);
+        });
+
+    }
+</script>
+
+{% endblock %}
+{% block css %}
+<style>
+    #action-button {
+        border-radius: 10px;
+        color: white;
+    }
+
+    .clickable-row:hover {
+        background-color: #cccccc;
+        cursor: pointer;
+    }
+
+    #checkboxDropdown .dropdown-item:hover {
+        background-color: #D3D3D3;
+    }
+
+    #checkboxDropdown .dropdown-item:active,
+    #checkboxDropdown .dropdown-item.active {
+        background-color: initial;
+        /* Remove color on click */
+    }
+</style>
+{% endblock %}
+
+{% block js %}
+
+<!-- Bootstrap core JavaScript -->
+<script src="{{ url_for('static', filename='vendor/jquery/jquery.min.js')}}"></script>
+<script src="{{ url_for('static', filename='vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+
+<!-- Core plugin JavaScript -->
+<script src="{{ url_for('static', filename='vendor/jquery-easing/jquery.easing.min.js')}}"></script>
+
+<!-- Page level plugins -->
+<script src="{{ url_for('static', filename='vendor/datatables/jquery.dataTables.min.js')}}"></script>
+<script src="{{ url_for('static', filename='vendor/datatables/dataTables.bootstrap4.min.js')}}"></script>
+
+<!-- Custom scripts for all pages -->
+<script src="{{ url_for('static', filename='js/sb-admin-2.min.js')}}"></script>
+
+<!-- Page level custom scripts -->
+<script src="{{ url_for('static', filename='js/demo/datatables-demo.js')}}"></script>
+
+{% endblock %}

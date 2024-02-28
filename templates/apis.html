@@ -1,0 +1,96 @@
+{% extends "base.html" %} {% block title %}Sample{% endblock %} 
+{% block content %}
+<!-- Bootstrap core JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script>
+
+        <!-- Begin Page Content -->
+        <div class="container-fluid">
+
+          <!-- Page Heading -->
+          <h1 class="h3 mb-2 text-gray-800 mb-4"> APIs</h1>
+          
+
+          <!-- DataTales -->
+          <div class="card shadow mb-4">
+
+            
+            <div class="card-header d-flex justify-content-between py-3">
+              <h6 class="m-0 font-weight-bold text-primary">List of plugins</h6>
+              {% if inactive_apis %}
+             <div class="dropdown">
+    <a href="#" class="btn btn-primary btn-icon-split dropdown-toggle" role="button" id="addEndpointDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <span class="icon text-white-50">
+            <i class="fas fa-plus"></i>
+        </span>
+        <span class="text">Add API endpoint</span>
+    </a>
+    <div class="dropdown-menu" aria-labelledby="addEndpointDropdown">
+       {% for api in inactive_apis %}     
+        <a class="dropdown-item" href="/activate_api/{{api.id}}">{{api.name}}</a>
+
+       {% endfor %}
+    </div>
+</div>
+  {% endif %}             
+            </div>
+           
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable-2" width="100%" cellspacing="0">
+                  <thead>
+                    <tr>
+                      <th>API name</th>
+                      <th>About</th>
+                      <th>Configure</th>
+                      <th>Delete</th>
+                    </tr>
+                  </thead>
+                 
+                  <tbody>
+                    {% for api in active_apis %}                  
+                    <tr class="odd">
+
+                    <td>{{api.name}}</td>
+                    <td>{{api.about}} </td>
+                    <td><a target="_blank" href="/configure/">Configure</a></td>
+                    <td onclick="window.location.href='/delete_api/{{api.id}}';">
+                      <a href="#" class="btn btn-danger btn-circle">
+                                        <i class="fas fa-trash"></i>
+                                    </a> </td>
+                    
+                  </tr>
+                    {% endfor %}
+
+                </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <!-- /.container-fluid -->
+
+      </div>
+      <!-- End of Main Content -->
+
+{% endblock %}
+
+{% block css %}
+<style>
+    .clickable-row:hover {
+        background-color: #cccccc;
+        cursor: pointer;
+    }
+</style>
+{% endblock %}
+
+{% block js %}
+    
+    <!-- Page level plugins -->
+    <script src="{{ url_for('static', filename='vendor/datatables/jquery.dataTables.min.js')}}"></script>
+    <script src="{{ url_for('static', filename='vendor/datatables/dataTables.bootstrap4.min.js')}}"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="{{ url_for('static', filename='js/demo/datatables-demo.js')}}"></script>
+{% endblock %}
