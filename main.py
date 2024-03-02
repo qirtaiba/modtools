@@ -45,9 +45,8 @@ def load_user(user_id):
 # Index Route
 @app.route('/')
 @app.route('/index')
-@login_required
 def index():
-  return redirect("/dashboard")
+  return render_template("home.html")
 
 
 def show_dashboard(escalated=False):
