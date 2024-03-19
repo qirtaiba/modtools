@@ -189,6 +189,7 @@ def get_pending_images(conn, cur):
     cur.execute("SELECT * FROM images WHERE status = 'pending'")
     image_data = cur.fetchall()
     if image_data:
+    
         image_list = [Image(*row) for row in image_data]
         return image_list
     else:
@@ -250,16 +251,25 @@ def update_image_status(image_id, status, conn, cur):
     conn.commit()
 
 @handle_connection
-def update_image_scan_results(image_id,scan_results, conn, cur):
+def update_image_hiveai_scan_results(image_id,scan_results, conn, cur):
     scan_results_json = json.dumps(scan_results)
     cur.execute(
-        "UPDATE images SET scan_results = %s, updated_at = CURRENT_TIMESTAMP WHERE id = %s",
+        "UPDATE images SET hiveai_results = %s, updated_at = CURRENT_TIMESTAMP WHERE id = %s",
         (scan_results_json,image_id)
     )
     conn.commit()
 
 @handle_connection
-def get_filtered_images(username=None, date=None, result=False, escalated=None, conn=None, cur=None):
+def update_image_photodna_scan_results(image_id,scan_results, conn, cur):
+    scan_results_json = json.dumps(scan_results)
+    cur.execute(
+        "UPDATE images SET photodna_results = %s, updated_at = CURRENT_TIMESTAMP WHERE id = %s",
+        (scan_results_json,image_id)
+    )
+    conn.commit()
+
+@handle_connection
+def get_filtered_images(username=None, date=None, photodna_results=False, hiveai_results=False, escalated=None, conn=None, cur=None):
     # Build the WHERE clause based on the provided filters
     where_conditions = []
 
@@ -280,8 +290,11 @@ def get_filtered_images(username=None, date=None, result=False, escalated=None, 
     if escalated:
         where_conditions.append("status = 'escalated'")
 
-    if result:
-        where_conditions.append("scan_results <> ''")
+    if photodna_results:
+        where_conditions.append("photodna_results <> ''")
+
+    if hiveai_results:
+        where_conditions.append("hiveai_results <> ''")
 
     # Construct the final SQL query
     sql_query = """
@@ -291,12 +304,12 @@ def get_filtered_images(username=None, date=None, result=False, escalated=None, 
     # Execute the query and retrieve the filtered images
     cur.execute(sql_query)
     filtered_images = [Image(*row) for row in cur.fetchall()]
-    if result:
-        filtered_images1 = []
-        for image in filtered_images:
-            if(len(image.scan_results) > 0 and image.scan_results != '""'):
-                filtered_images1.append(image)
-    return filtered_images1
+    # if result:
+    #     filtered_images1 = []
+    #     for image in filtered_images:
+    #         if(len(image.scan_results) > 0 and image.scan_results != '""'):
+    #             filtered_images1.append(image)
+    return filtered_images
 
 #====================================
 
@@ -466,18 +479,12 @@ def bla(conn=None, cur=None):
     conn.commit()
 
 @handle_connection
-def add_columns_to_images(conn=None, cur=None):
-    # Add new columns to the images table
+def update_images_table_structure(conn=None, cur=None):
+    # Remove the scan_results column (if exists) and add new columns for photodna_results and hiveai_results
     cur.execute(
         """
         ALTER TABLE images
-        ADD COLUMN "incident_time" timestamp,
-        ADD COLUMN "reportee_name" varchar(255),
-        ADD COLUMN "reportee_ip_address" varchar(16),
-        ADD COLUMN "username" varchar(50),
-        ADD COLUMN "latitude" varchar(50),
-        ADD COLUMN "longitude" varchar(50),
-        ADD COLUMN "altitude" varchar(50);
+        DROP COLUMN "hiveai_result";
         """
     )
     conn.commit()
@@ -491,57 +498,6 @@ def remove_columns_from_images(conn=None, cur=None):
         """
     )
     conn.commit()
-
-# remove_columns_from_images()
-# add_columns_to_images()
-# bla()
-
-
-def test_image_operations():
-    # Replace the following with your own test data
-    test_user_id = 1
-    test_image_url = "example.com/image.jpg"
-    test_metadata = {"key": "value"}
-    test_scan_results = {"result": "clean"}
-    test_status = "pending"
-
-    # Test create_image function
-    image_id = create_image(test_user_id, test_image_url, test_metadata, test_scan_results, test_status)
-    assert image_id is not None
-
-    # Test get_image_by_id function
-    image = get_image_by_id(image_id)
-    assert image is not None
-    assert image.user_id == test_user_id
-    assert image.image_url == test_image_url
-    assert image.metadata == test_metadata
-    assert image.scan_results == test_scan_results
-    assert image.status == test_status
-
-    # Test update_image function
-    updated_user_id = 2
-    updated_image_url = "example.com/updated.jpg"
-    updated_metadata = {"key": "updated_value"}
-    updated_scan_results = {"result": "updated_clean"}
-    updated_status = "approved"
-    update_image(image_id, updated_user_id, updated_image_url, updated_metadata, updated_scan_results, updated_status)
-    
-    updated_image = get_image_by_id(image_id)
-    assert updated_image is not None
-    assert updated_image.user_id == updated_user_id
-    assert updated_image.image_url == updated_image_url
-    assert updated_image.metadata == updated_metadata
-    assert updated_image.scan_results == updated_scan_results
-    assert updated_image.status == updated_status
-
-    # Test get_all_images function
-    all_images = get_all_images()
-    assert len(all_images) > 0
-
-    # Test delete_image function
-    delete_image(image_id)
-    deleted_image = get_image_by_id(image_id)
-    assert deleted_image is None
 
 def test_invitation_crud_methods():
     # Create an invitation

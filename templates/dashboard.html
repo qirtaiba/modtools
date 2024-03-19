@@ -31,8 +31,12 @@
         <div class="form-group">
             <label>Plugins:</label>
             <div class="form-check">
-                <input type="checkbox" class="form-check-input" id="resultCheckbox">
-                <label class="form-check-label" for="resultCheckbox">Has Result</label>
+                <input type="checkbox" class="form-check-input" id="photodna_resultsCheckbox">
+                <label class="form-check-label" for="photodna_resultsCheckbox">PhotoDNA Result</label>
+            </div>
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="hiveai_resultsCheckboxkbox">
+                <label class="form-check-label" for="hiveai_resultsCheckbox">HiveAI Result</label>
             </div>
         </div>
 
@@ -52,7 +56,9 @@
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
 
                     <div class="col-xl-8 col-lg-7">
-                        <h6 class="m-0 font-weight-bold text-primary">Result: {{ image.scan_results }} </h6>
+                        <h6 class="m-0 font-weight-bold text-primary">HiveAI Result: {{ image.hiveai_results }} </h6>
+                        <h6 class="m-0 font-weight-bold text-primary">PhotoDNA Result: {{ image.photodna_results }}
+                        </h6>
 
                     </div>
                     <!-- Actions Button -->
@@ -241,7 +247,8 @@
         // Retrieve values from input fields and checkboxes
         const username = $('#usernameInput').val();
         const date = $('#dateInput').val();
-        const result = $('#resultCheckbox').prop('checked');
+        const photodna_results = $('#photodna_resultsCheckbox').prop('checked');
+        const hiveai_results = $('#hiveai_resultsCheckbox').prop('checked');
         const escalated = getEscalatedFromUrl();
 
         // Make AJAX request to the /filter_images endpoint
@@ -251,7 +258,8 @@
             data: {
                 username: username,
                 date: date,
-                result: result,
+                photodna_results: photodna_results,
+                hiveai_results: hiveai_results,
                 escalated: escalated,
             },
             success: function (response) {
@@ -282,7 +290,9 @@
                 <div class="card shadow mb-4">
                     <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                         <div class="col-xl-8 col-lg-7">
-                            <h6 class="m-0 font-weight-bold text-primary">Result: ${image.scan_results}</h6>
+                          <h6 class="m-0 font-weight-bold text-primary">HiveAI Result: ${image.hiveai_results}</h6>
+                        <h6 class="m-0 font-weight-bold text-primary">PhotoDNA Result: ${image.photodna_results}
+                        </h6>
                         </div>
                         <!-- Actions Button -->
                         <div class="btn-group">

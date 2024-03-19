@@ -7,8 +7,8 @@ def photoDNA_report():
     headers = {
     "Content-Type": "application/json; charset=utf-8",
     "Ocp-Apim-Subscription-Key": os.environ["PHOTODNA_KEY"],
-    "x-user": "ProstasiaFoundation",
-    "x-pwd": "Rj9+Mp8+Ue6@"  
+    "x-user": os.environ["x-user"],
+    "x-pwd": os.environ["x-pwd"]
     }
     data = {
         "OrgName":"TestOrg",
@@ -184,8 +184,8 @@ def send_request():
             headers={
                 "Content-Type": "",
                 "Ocp-Apim-Subscription-Key": os.environ["PHOTODNA_KEY"],
-                "x-user": "ProstasiaFoundation",
-                "x-pwd": "Rj9+Mp8+Ue6@" 
+                "x-user": os.environ["x-user"],
+                "x-pwd":  os.environ["x-pwd"] 
             },
             data=json.dumps({
                 "OrgName":"TestOrg",

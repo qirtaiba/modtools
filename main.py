@@ -14,6 +14,15 @@ from actions import get_action_manager
 photo_path = "photo.jpg"
 photo_scan_app=initialize_photo_scan_app()
 
+def test():
+  photo_path ="https://s3.amazonaws.com/docs.thehive.ai/client_demo/moderation_image.png"  
+  photo_scan_app=initialize_photo_scan_app()
+  analysis_results = photo_scan_app.scan_photo(photo_path)
+  for analysis in analysis_results:
+      print(analysis)
+
+test()
+
 # Setting up Flask
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
@@ -55,7 +64,8 @@ def show_dashboard(escalated=False):
   if images:
     if escalated: 
       images=db_handler.get_escalated_images()
-      images=[image.to_dict() for image in images]
+      if images:
+        images=[image.to_dict() for image in images]
       dashboard_name="Escalated images"
     else:  
       images=[image.to_dict() for image in images]
@@ -75,10 +85,12 @@ def filter_images():
     # Retrieve filter data from the request
     username = request.form.get('username')
     date = request.form.get('date')
-    result = request.form.get('result') == 'true'
+    photodna_results = request.form.get('photodna_results') == 'true'
+    hiveai_results = request.form.get('hiveai_results') == 'true'
     escalated = request.form.get('escalated') == 'true'
     # Call the function to get filtered images
-    filtered_images = db_handler.get_filtered_images(username, date, result, escalated)
+    # Here
+    filtered_images = db_handler.get_filtered_images(username, date, photodna_results, hiveai_results, escalated)
     images = [image.to_dict() for image in filtered_images]
     return jsonify({'images': images})
 
@@ -249,14 +261,11 @@ def scan():
    images=db_handler.get_unscanned_images()
    for image in images:
          analysis_results=photo_scan_app.scan_photo("http://127.0.0.1:7000/static/img/"+image.image_url)
-         print(analysis_results)
-         #TODO neka logika da se upakuje u novi zapis
-         result_string=""
          for result in analysis_results:
-          if result[0]==True:
-            result_string+=result[1]+", " 
-         scan_results=str(result_string.strip(", "))
-         db_handler.update_image_scan_results(image.id,scan_results)
+            if result.plugin == 'HiveAI':
+               db_handler.update_image_hiveai_scan_results(image.id,result.result)
+            elif result.plugin == 'PhotoDNA':
+               db_handler.update_image_photodna_scan_results(image.id,result.result)
    return redirect("dashboard")
 
 @app.route('/status/<image_id>', methods=["GET"])
@@ -266,7 +275,8 @@ def get_image_status(image_id):
         return jsonify({
             "image_url": image.image_url,
             "status": image.status,
-            "scan_result": image.scan_results
+            "photodna_results": image.photodna_results,
+            "hiveai_results": image.hiveai_results
         }),200
     else:
         return jsonify({"message": "No image with that id found."}), 404
@@ -446,5 +456,4 @@ def update_or_create_image():
 
 # Run the Flask app
 if __name__ == '__main__':
-  #from waitress import serve
   app.run(host="0.0.0.0", port=7000)

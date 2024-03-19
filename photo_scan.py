@@ -102,7 +102,7 @@ class HiveAI_Plugin:
         
         headers = {
         "accept": "application/json",
-        "authorization": "token {}".format( os.environ["HIVEAI_KEY"] )
+        "authorization": "token {}".format(os.environ["HIVEAI_KEY"] )
         }
         
         response = requests.post( "https://api.thehive.ai/api/v2/task/sync", headers=headers, data=payload)
@@ -111,9 +111,9 @@ class HiveAI_Plugin:
         
         harmfull_content, bad_class = self.check_for_bad_classes(response)
         if harmfull_content:
-          return True,f"Harmfull content found: {bad_class}"
+          return {"plugin": "HiveAI", "result": f"Harmfull content found: {bad_class}"}
         else:
-          return False,""
+          return {"plugin": "HiveAI", "result": "Harmfull content not found"}
 
 
 
@@ -133,9 +133,9 @@ class PhotoDNA_Plugin:
       response = requests.post(url, headers=headers, json=data)
       scan_result=response.json()
       if scan_result["IsMatch"]:
-         return True,"PhotoDNA match"
+         {"plugin": "PhotoDNA", "result": f"PhotoDNA match"}
       else:
-         return False,"No PhotoDNA match"
+         return {"plugin": "PhotoDNA", "result": f"No PhotoDNA match"}
     
 
 def initialize_photo_scan_app():

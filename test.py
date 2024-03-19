@@ -67,29 +67,4 @@ def test_upload_endpoint():
         print("Image not found.")
     else:
         print("An error occurred with status code:", response.status_code)
-
-if __name__ == '__main__':
-  #drop_users_table()
-  # response = requests.post(url, json=data)
-
-  # # Print the response
-  # print(response.status_code)
-  # print(response)
-
-  # create_user("John", "Doe", "john2@example.com", "password123")
-  # input()
-  # user_id=create_user("Alice", "Johnson", "alice2@example.com", "password789")
-  # input()
-  # update_user(user_id, "Alice", "Johnson-Smith", "alice@example.com", "newpassword")
-  # delete_user(user_id)
-  # input()
-  #test_upload_endpoint()
-  for image in test_images_list:
-    metadata = """{
-      "title": image.strip(".jpg"),
-      "description": "A sample image with ksaljhdksalk"
-    }"""
-    scan_results = "none"
-    status = "pending"
-    db_handler.create_image(1, image, metadata,
-                                           scan_results, status)
+        

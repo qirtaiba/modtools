@@ -30,17 +30,16 @@ class User(UserMixin):
 
 from datetime import datetime
 
-from datetime import datetime
-
 class Image:
-    def __init__(self, id, user_id, image_url, scan_results, status,
+    def __init__(self, id, user_id, image_url, photodna_results=None, hiveai_results=None, status='pending',
                  created_at=None, updated_at=None, incident_time=None,
                  reportee_name=None, reportee_ip_address=None, username=None,
                  latitude=None, longitude=None, altitude=None):
         self.id = id
         self.user_id = user_id
         self.image_url = image_url
-        self.scan_results = scan_results
+        self.photodna_results = photodna_results
+        self.hiveai_results = hiveai_results
         self.status = status
         self.created_at = created_at if created_at else datetime.now()
         self.updated_at = updated_at if updated_at else datetime.now()
@@ -53,14 +52,14 @@ class Image:
         self.altitude = altitude
 
     def to_dict(self):
-        scan_results = self.scan_results.strip('"')
-        created_at_formatted = self.created_at.strftime('%d/%m/%y %H:%M:%S')
-        updated_at_formatted = self.updated_at.strftime('%d/%m/%y %H:%M:%S')
+        created_at_formatted = self.created_at
+        updated_at_formatted = self.updated_at
         return {
             "id": self.id,
             "user_id": self.user_id,
             "image_url": self.image_url,
-            "scan_results": scan_results,
+            "photodna_results": self.photodna_results,
+            "hiveai_results": self.hiveai_results,
             "status": self.status,
             "created_at": created_at_formatted,
             "updated_at": updated_at_formatted,
@@ -76,7 +75,7 @@ class Image:
     def __str__(self):
         return (
             f"Image(id={self.id}, user_id={self.user_id}, image_url='{self.image_url}', "
-            f"scan_results={self.scan_results}, "
+            f"photodna_results={self.photodna_results}, hiveai_results={self.hiveai_results},"
             f"status='{self.status}', created_at='{self.created_at}', "
             f"updated_at='{self.updated_at}', incident_time='{self.incident_time}', "
             f"reportee_name='{self.reportee_name}', reportee_ip_address='{self.reportee_ip_address}', "
