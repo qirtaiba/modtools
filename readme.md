@@ -60,15 +60,37 @@ pip install -r requirements.txt
 
 Create a .env file at the root directory and configure your environment variables:
 
-SECRET_KEY     your secret key for your flask app
-PHOTODNA_KEY   photo dna key
-x-user         photo dna username
-x-pwd          photo dna password
-HIVEAI_KEY     Your hive ai key
-DATABASE_URL   Connection string to a database like neondb.
-BASE_URL       url of your website where your moderation tool is hosted
-EMAIL_SENDER   smtp email sender
-EMAIL_PASSWORD smtp email password
+SECRET_KEY        your secret key for your flask app
+PHOTODNA_KEY      photo dna key
+x-user            photo dna username
+x-pwd             photo dna password
+HIVEAI_KEY        Your hive ai key
+DATABASE_URL      Connection string to a database like neondb.
+BASE_URL          url of your website where your moderation tool is hosted
+EMAIL_SENDER      smtp email sender
+EMAIL_PASSWORD    smtp email password
+
+**PhototDNA Report json data**
+OrgName           organisation name
+ReporterName      reporter name
+ReporterEmail     reporter email
+IncidentTime      incident_time, 
+ReporteeName      username, 
+ReporteeIPAddress reportee ip_address,
+ViolationContentCollection [
+    {
+        Name       image name,
+        Value      base64_encoding of the image,
+        Location   image submition location
+                { 
+                    "Latitude" :image_data.latitude, 
+                    "Longitude":image_data.longitude,
+                    "Altitude" :image_data.altitude 
+                }
+        UploadIpAddress  upload ip address
+        UploadDateTime   when was the image uploaded
+    }
+]
 
 **Initialize the Database**
 
