@@ -38,7 +38,7 @@
     <link
       id="theme-style"
       rel="stylesheet"
-      href="{{ url_for('static', filename='assets/css/theme-1.css')}}"
+      href="{{ url_for('static', filename='assets/css/theme-4.css')}}"
     />
     <!-- GitHub Button -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
@@ -128,7 +128,7 @@
           >
         </div>
         <ul class="meta list-inline">
-          <li class="list-inline-item">
+        <!--   <li class="list-inline-item">
             <a href="https://github.com/qirtaiba/modtools" target="_blank"
               >View on GitHub</a
             >
@@ -147,9 +147,8 @@
               target="_blank"
               >Jeremy Malcolm</a
             >
-          </li>
+          </li>        //meta-->
         </ul>
-        <!--//meta-->
       </div>
       <!--//container-->
       <div class="social-media">
@@ -251,17 +250,14 @@
         <div class="row">
           <div class="item col-lg-4 col-md-6 col-12">
             <div class="icon-holder">
-              <i class="fa-solid fa-heart"></i>
+              <i class="fa-solid fa-image"></i>
             </div>
             <div class="content">
-              <h3 class="sub-title">Designed for developers</h3>
+              <h3 class="sub-title">Image moderation dashboard</h3>
               <p>
-                Outline a benefit here. Tell users what your plugin/software can
-                do for them. You can change the icon above to any of the 2000+
-                <a href="https://fontawesome.com/" target="_blank"
-                  >FontAwesome</a
-                >
-                icons available.
+                Includes a basic image moderation dashboard for human review and
+                actioning of submitted images. Actions available to moderators
+                through the dashboard are fully configurable.
               </p>
             </div>
             <!--//content-->
@@ -269,17 +265,29 @@
           <!--//item-->
           <div class="item col-lg-4 col-md-6 col-12">
             <div class="icon-holder">
-              <i class="fa-solid fa-clock"></i>
+              <i class="fa-solid fa-filter"></i>
             </div>
             <div class="content">
-              <h3 class="sub-title">Time saver</h3>
+              <h3 class="sub-title">Smart filtering</h3>
               <p>
-                Outline a benefit here. Tell users what your plugin/software can
-                do for them. You can change the icon above to any of the 2000+
-                <a href="https://fontawesome.com/" target="_blank"
-                  >FontAwesome</a
-                >
-                icons available.
+                Filter images based on metadata such as the results of automatic
+                scans. Moderators only need to spend their time reviewing images
+                already identified as suspicious.
+              </p>
+            </div>
+            <!--//content-->
+          </div>
+          <!--//item-->
+          <div class="item col-lg-4 col-md-6 col-12">
+            <div class="icon-holder">
+              <i class="fa-solid fa-eye-slash"></i>
+            </div>
+            <div class="content">
+              <h3 class="sub-title">Headless mode</h3>
+              <p>
+                Can also be run in a server-only mode for automatic scanning
+                and actioning of images that match a defined threshold or
+                event, with the ability to query actions taken.
               </p>
             </div>
             <!--//content-->
@@ -290,14 +298,11 @@
               <i class="fa-solid fa-crosshairs"></i>
             </div>
             <div class="content">
-              <h3 class="sub-title">UX-centred</h3>
+              <h3 class="sub-title">Extensible plugin architecture</h3>
               <p>
-                Outline a benefit here. Tell users what your plugin/software can
-                do for them. You can change the icon above to any of the 2000+
-                <a href="https://fontawesome.com/" target="_blank"
-                  >FontAwesome</a
-                >
-                icons available.
+                Out of the box, comes with integration of support for Hive AI
+                image classification, PhotoDNA hash scanning, email alerting, 
+                and reporting to NCMEC (own credentials required).
               </p>
             </div>
             <!--//content-->
@@ -305,17 +310,14 @@
           <!--//item-->
           <div class="item col-lg-4 col-md-6 col-12">
             <div class="icon-holder">
-              <i class="fa-solid fa-mobile-alt"></i>
+              <i class="fa-solid fa-users"></i>
             </div>
             <div class="content">
-              <h3 class="sub-title">Mobile-friendly</h3>
+              <h3 class="sub-title">Multi-user capable</h3>
               <p>
-                Outline a benefit here. Tell users what your plugin/software can
-                do for them. You can change the icon above to any of the 2000+
-                <a href="https://fontawesome.com/" target="_blank"
-                  >FontAwesome</a
-                >
-                icons available.
+                User authentication leverages Flask-Login. Admins can invite,
+                promote, degrade, or remove users, maintaining robust control
+                over who can access the system.
               </p>
             </div>
             <!--//content-->
@@ -326,32 +328,11 @@
               <i class="fa-solid fa-code"></i>
             </div>
             <div class="content">
-              <h3 class="sub-title">Easy to customise</h3>
+              <h3 class="sub-title">Permissive license</h3>
               <p>
-                Outline a benefit here. Tell users what your plugin/software can
-                do for them. You can change the icon above to any of the 2000+
-                <a href="https://fontawesome.com/" target="_blank"
-                  >FontAwesome</a
-                >
-                icons available.
-              </p>
-            </div>
-            <!--//content-->
-          </div>
-          <!--//item-->
-          <div class="item col-lg-4 col-md-6 col-12">
-            <div class="icon-holder">
-              <i class="fa-solid fa-coffee"></i>
-            </div>
-            <div class="content">
-              <h3 class="sub-title">SCSS source files included</h3>
-              <p>
-                Outline a benefit here. Tell users what your plugin/software can
-                do for them. You can change the icon above to any of the 2000+
-                <a href="https://fontawesome.com/" target="_blank"
-                  >FontAwesome</a
-                >
-                icons available.
+                Built on Flask, and licensed under the permissive MIT license.
+                Integrate it into your own systems without the risk of
+                being required to share your own proprietary code.
               </p>
             </div>
             <!--//content-->
@@ -367,14 +348,14 @@
     <!-- ******FEATURES****** -->
     <section id="features" class="features section">
       <div class="container text-center">
-        <h2 class="title">Features</h2>
+        <h2 class="title">Technologies Used</h2>
         <ul class="feature-list list-unstyled">
-          <li><i class="fa-solid fa-check"></i> Fully responsive</li>
-          <li><i class="fa-solid fa-check"></i> HTML5 + CSS3</li>
-          <li><i class="fa-solid fa-check"></i> Built on Bootstrap 5</li>
-          <li><i class="fa-solid fa-check"></i> SCSS source files included</li>
-          <li><i class="fa-solid fa-check"></i> FontAwesome icons</li>
-          <li><i class="fa-solid fa-check"></i> 4 colour schemes</li>
+          <li><i class="fa-solid fa-check"></i> Flask</li>
+          <li><i class="fa-solid fa-check"></i> Flask-Bcrypt</li>
+          <li><i class="fa-solid fa-check"></i> Flask-Login</li>
+          <li><i class="fa-solid fa-check"></i> Jinja2</li>
+          <li><i class="fa-solid fa-check"></i> smtplib</li>
+          <li><i class="fa-solid fa-check"></i> psycopg2</li>
           <li>
             <i class="fa-solid fa-check"></i> Compatible with all modern
             browsers
@@ -391,33 +372,11 @@
         <div class="docs-inner">
           <h2 class="title text-center">Get Started</h2>
           <div class="block">
-            <h3 class="sub-title text-center">HTML</h3>
-            <p>
-              <a href="http://prismjs.com/" target="_blank">PrismJS</a> is used
-              as the syntax highlighter here.
-            </p>
-            <p>
-              Below are the details of the custom PrismJS build used in this
-              template. You can
-              <a href="http://prismjs.com/download.html" target="_blank"
-                >build your own version</a
-              >
-              via their website should you need to.
-            </p>
-            <ul class="list-unstyled">
-              <li><strong>Compression level:</strong> Minified</li>
-              <li><strong>Theme:</strong> Okaidia</li>
-              <li>
-                <strong>Languages:</strong> Markup, CSS, C-like, JavaScript, PHP
-                and Python
-              </li>
-            </ul>
+            <h3 class="sub-title text-center">Clone the repository</h3>
             <div class="code-block">
               <!--//Use Prismjs - http://prismjs.com/index.html#basic-usage -->
-              <pre><code class="language-markup">
-    &ltp class="my-style"&gt
-      Hello World!
-    &lt/p&gt
+              <pre><code class="language-bash">
+    git clone https://github.com/qirtaiba/modtools
                      </code></pre>
             </div>
             <!--//code-block-->
@@ -425,29 +384,15 @@
           <!--//block-->
 
           <div class="block">
-            <h3 class="sub-title text-center">CSS</h3>
-            <p>
-              Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue.
-              Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus.
-            </p>
+            <h3 class="sub-title text-center">Set up a virtual environment</h3>
 
             <div class="code-block">
               <!--//Use Prismjs - http://prismjs.com/index.html#basic-usage -->
               <pre>
-    <code class="language-css">
-    /*   
-     * Template Name: devAid - Bootstrap 5 theme for developers
-     * Author: Xiaoying Riley at 3rd Wave Media
-     * Website: https://themes.3rdwavemedia.com/
-     * Twitter: @3rdwave_themes
-    */
-    body {
-      font-family: 'Lato', arial, sans-serif;
-      color: #444444;
-      font-size: 16px;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    }
+    <code class="language-bash">
+python3 -m venv venv
+source venv/bin/activate  # For Unix/Linux/MacOS
+venv\Scripts\activate  # For Windows
     </code></pre>
             </div>
             <!--//code-block-->
@@ -455,40 +400,41 @@
           <!--//block-->
 
           <div class="block">
-            <h3 class="sub-title text-center">JavaScript</h3>
-            <p>
-              Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue.
-              Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus.
-              Lorem ipsum dolor sit amet, consectetuer adipiscing elit ligula
-              eget dolor.
-            </p>
+            <h3 class="sub-title text-center">Install Dependencies</h3>
             <div class="code-block">
-              <pre><code class="language-javascript">
-    if( awesome ){
-        console.log('This is Awesome');
-    }else{
-        $('body').addClass('give-me-awesome');
-    }
+              <pre><code class="language-bash">
+pip install -r requirements.txt
                     </code></pre>
             </div>
             <!--//code-block-->
           </div>
           <!--//block-->
           <div class="block">
-            <h3 class="sub-title text-center">Full Documentation</h3>
-            <p>
-              If your documentation is very long you can host the full docs page
-              (including FAQ etc) on GitHub and provide a Call to Action button
-              below to direct users there.
-            </p>
-            <p class="text-center">
-              <a
-                class="btn btn-cta-primary"
-                href="https://github.com/qirtaiba/modtools"
-                target="_blank"
-                >More on GitHub</a
-              >
-            </p>
+            <h3 class="sub-title text-center">PhotoDNA report JSON data</h3>
+            <div class="code-block">
+              <pre><code class="language-json">
+OrgName           organisation name
+ReporterName      reporter name
+ReporterEmail     reporter email
+IncidentTime      incident_time, 
+ReporteeName      username, 
+ReporteeIPAddress reportee ip_address,
+ViolationContentCollection [
+    {
+        Name       image name,
+        Value      base64_encoding of the image,
+        Location   image submition location
+                { 
+                    "Latitude" :image_data.latitude, 
+                    "Longitude":image_data.longitude,
+                    "Altitude" :image_data.altitude 
+                }
+        UploadIpAddress  upload ip address
+        UploadDateTime   when was the image uploaded
+    }
+]
+              </code></pre>
+            </div>
           </div>
           <!--//block-->
         </div>
@@ -502,36 +448,17 @@
     <section id="license" class="license section">
       <div class="container">
         <div class="license-inner">
-          <h2 class="title text-center">License</h2>
+          <h2 class="title text-center">MIT License</h2>
           <div class="info">
             <p>
-              This Bootstrap theme is made by UX/UI designer
-              <a href="https://twitter.com/3rdwave_themes" target="_blank"
-                >Xiaoying Riley</a
-              >
-              at 3rd Wave Media for developers and is
-              <strong>100% FREE</strong> as long as you keep the footer
-              attribution link.
-            </p>
-            <p>
-              <strong>[Tip for developers]:</strong> If your project is open
-              source, you might want to put a
-              <a
-                href="https://www.paypal.com/us/cgi-bin/?cmd=_donate-intro-outside"
-                target="_blank"
-                >PayPal "Donate" button</a
-              >
-              below so your users can express their gratitude. If your project
-              is commercial, you can put a
-              <a
-                href="https://www.paypal.com/us/cgi-bin/webscr?cmd=_singleitem-intro-outside"
-                target="_blank"
-                >PayPal "Buy Now" button</a
-              >
-              instead.
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
+
+<p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
+
+<p>THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
             </p>
           </div>
-          <!--//info-->
+          <!--//info
           <div class="cta-container">
             <div class="speech-bubble">
               <p class="intro">
@@ -549,7 +476,7 @@
               <div class="icon-holder text-center">
                 <i class="far fa-smile"></i>
               </div>
-            </div>
+            </div>-->
             <!--//speech-bubble-->
             <div class="btn-container text-center">
               <a
@@ -575,14 +502,13 @@
         <div class="contact-inner">
           <h2 class="title text-center">Contact</h2>
           <p class="intro text-center">
-            I hope you find this Bootstrap template useful. <br />Feel free to
-            get in touch if you have any questions or suggestions.
+            Feel free to get in touch with questions, suggestions, or requests for customizations or support.
           </p>
           <div class="author-message">
             <div class="profile">
               <img class="img-fluid" src="assets/images/profile.png" alt="" />
             </div>
-            <!--//profile-->
+            <!--//profile
             <div class="speech-bubble">
               <h3 class="sub-title">
                 Love free Bootstrap themes and templates?
@@ -613,8 +539,7 @@
                 <br />
                 <span class="title">UX/UI Designer</span>
               </div>
-              <!--//source-->
-            </div>
+            </div>-->
             <!--//speech-bubble-->
           </div>
           <!--//author-message-->
@@ -622,29 +547,29 @@
             <h4 class="sub-title">Get Connected</h4>
             <ul class="social-icons list-inline">
               <li class="list-inline-item">
-                <a href="https://twitter.com/3rdwave_themes" target="_blank"
+                <a href="https://twitter.com/qirtaiba" target="_blank"
                   ><i class="fab fa-twitter"></i
                 ></a>
               </li>
-              <li class="list-inline-item">
+              <!--<li class="list-inline-item">
                 <a href="https://www.facebook.com/3rdwavethemes" target="_blank"
                   ><i class="fab fa-facebook-f"></i
                 ></a>
-              </li>
+              </li>-->
 
               <li class="list-inline-item">
-                <a href="https://medium.com/@3rdwave_themes/" target="_blank"
+                <a href="https://medium.com/@qirtaiba/" target="_blank"
                   ><i class="fab fa-medium-m"></i
                 ></a>
               </li>
-              <li class="list-inline-item">
+              <!--<li class="list-inline-item">
                 <a href="https://dribbble.com/Xiaoying" target="_blank"
                   ><i class="fab fa-dribbble"></i
                 ></a>
-              </li>
+              </li>-->
               <li class="list-inline-item last">
                 <a
-                  href="https://themes.3rdwavemedia.com/contact/"
+                  href="https://jere.my/"
                   target="_blank"
                   ><i class="fas fa-envelope"></i
                 ></a>
