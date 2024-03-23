@@ -38,7 +38,7 @@
     <link
       id="theme-style"
       rel="stylesheet"
-      href="{{ url_for('static', filename='assets/css/theme-4.css')}}"
+      href="{{ url_for('static', filename='assets/css/theme-2.css')}}"
     />
     <!-- GitHub Button -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
@@ -348,19 +348,8 @@
     <!-- ******FEATURES****** -->
     <section id="features" class="features section">
       <div class="container text-center">
-        <h2 class="title">Technologies Used</h2>
-        <ul class="feature-list list-unstyled">
-          <li><i class="fa-solid fa-check"></i> Flask</li>
-          <li><i class="fa-solid fa-check"></i> Flask-Bcrypt</li>
-          <li><i class="fa-solid fa-check"></i> Flask-Login</li>
-          <li><i class="fa-solid fa-check"></i> Jinja2</li>
-          <li><i class="fa-solid fa-check"></i> smtplib</li>
-          <li><i class="fa-solid fa-check"></i> psycopg2</li>
-          <li>
-            <i class="fa-solid fa-check"></i> Compatible with all modern
-            browsers
-          </li>
-        </ul>
+        <h2 class="title">Screenshot</h2>
+          <img class="img-fluid" src="{{ url_for('static', filename='assets/images/screenshot.png')}}" alt="" />
       </div>
       <!--//container-->
     </section>
@@ -499,7 +488,7 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
           </p>
           <div class="author-message">
             <div class="profile">
-              <img class="img-fluid" src="assets/images/profile.png" alt="" />
+              <img class="img-fluid" src="{{ url_for('static', filename='assets/images/profile.png')}}" alt="" />
             <!--FIXME add image-->
             </div>
             <!--//profile-->
@@ -515,8 +504,12 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
                 vision of an open source image moderation tool that integrates 
                 popular APIs for screening out adult content and CSAM. 
               </p>
-            </div>
-            <!--//speech-bubble-->
+              <div class="source">
+                <span class="name"><a href="https://jere.my" target="_blank">Jeremy Malcolm</a></span>
+                <br />
+                <span class="title">Trust & Safety Consultant</span>
+              </div><!--//source-->
+            </div><!--//speech-bubble-->
           </div>
           <!--//author-message-->
           <div class="info text-center">
