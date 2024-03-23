@@ -39,8 +39,7 @@ class PhotoDNA_report_action:
     def __init__(self, reporter_name, reporter_email): 
         self.reporter_name= reporter_name
         self.reporter_email= reporter_email
-        self.organization_name="CSMART"
-        self.organization_name="CSMART"
+        self.organization_name="MODTOOLS"
         self.server_ip = get_server_ip()
       
     def perform_action(self,image_data):
