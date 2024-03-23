@@ -114,7 +114,7 @@
     <!-- ******PROMO****** -->
     <section id="promo" class="promo section offset-header">
       <div class="container text-center">
-        <h2 class="title">Modtools<span class="highlight">Image</span></h2>
+        <h2 class="title">Modtools<wbr><span class="highlight">Image</span></h2>
         <p class="intro">
           A simple, multi-user image moderation platform for Trust & Safety professionals
         </p>
@@ -371,12 +371,13 @@
       <div class="container">
         <div class="docs-inner">
           <h2 class="title text-center">Get Started</h2>
+            
           <div class="block">
             <h3 class="sub-title text-center">Clone the repository</h3>
             <div class="code-block">
               <!--//Use Prismjs - http://prismjs.com/index.html#basic-usage -->
               <pre><code class="language-bash">
-    git clone https://github.com/qirtaiba/modtools
+git clone https://github.com/qirtaiba/modtools
                      </code></pre>
             </div>
             <!--//code-block-->
@@ -409,34 +410,26 @@ pip install -r requirements.txt
             <!--//code-block-->
           </div>
           <!--//block-->
+
           <div class="block">
-            <h3 class="sub-title text-center">PhotoDNA report JSON data</h3>
+            <h3 class="sub-title text-center">Or simply use Docker</h3>
             <div class="code-block">
-              <pre><code class="language-json">
-OrgName           organisation name
-ReporterName      reporter name
-ReporterEmail     reporter email
-IncidentTime      incident_time, 
-ReporteeName      username, 
-ReporteeIPAddress reportee ip_address,
-ViolationContentCollection [
-    {
-        Name       image name,
-        Value      base64_encoding of the image,
-        Location   image submition location
-                { 
-                    "Latitude" :image_data.latitude, 
-                    "Longitude":image_data.longitude,
-                    "Altitude" :image_data.altitude 
-                }
-        UploadIpAddress  upload ip address
-        UploadDateTime   when was the image uploaded
-    }
-]
-              </code></pre>
+              <pre><code class="language-bash">
+docker pull qirtaiba/modtools
+docker run -p 7000:7000 -e ENV_VARIABLE_NAME=value modtools
+                    </code></pre>
             </div>
+            <!--//code-block-->
           </div>
-          <!--//block-->
+
+          <div class="block">
+              <h3 class="sub-title text-center">Full Documentation</h3>
+              <p>For additional setup steps including setting environment variables, please consult the README file on Github.</p>
+              <p class="text-center">
+                  <a class="btn btn-cta-primary" href="https://github.com/qirtaiba/modtools" target="_blank">More on GitHub</a>
+              </p>
+          </div><!--//block-->
+            
         </div>
         <!--//docs-inner-->
       </div>
@@ -507,39 +500,22 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
           <div class="author-message">
             <div class="profile">
               <img class="img-fluid" src="assets/images/profile.png" alt="" />
+            <!--FIXME add image-->
             </div>
-            <!--//profile
+            <!--//profile-->
             <div class="speech-bubble">
               <h3 class="sub-title">
-                Love free Bootstrap themes and templates?
+                Note: Modtools Image is pre-release software
               </h3>
               <p>
-                <a href="https://twitter.com/3rdwave_themes" target="_blank"
-                  >Follow me on Twitter</a
-                >
-                so you don’t miss any future freebies! You can find all the
-                freebies I made for developers
-                <a
-                  href="https://themes.3rdwavemedia.com/bootstrap-templates/free/"
-                  target="_blank"
-                  >here</a
-                >.
+                Please note that Modtools Image is currently in the early stages
+                of development. Some features and documentation are missing or
+                incomplete. This pre-release is being provided for the purpose
+                of inspiring a community of developers to join us to realize the
+                vision of an open source image moderation tool that integrates 
+                popular APIs for screening out adult content and CSAM. 
               </p>
-              <p>
-                <strong>[Tip for developers]:</strong> If you take on freelance
-                work you can put a tailored message here about your availability
-                to attract potential clients. Be creative and good luck! :)
-              </p>
-              <div class="source">
-                <span class="name"
-                  ><a href="https://twitter.com/3rdwave_themes" target="_blank"
-                    >Xiaoying Riley</a
-                  ></span
-                >
-                <br />
-                <span class="title">UX/UI Designer</span>
-              </div>
-            </div>-->
+            </div>
             <!--//speech-bubble-->
           </div>
           <!--//author-message-->
