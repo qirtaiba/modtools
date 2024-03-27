@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Modtools Image - simple, multi-user image moderation platform</title>
+    <!-- Meta -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Modtools Image is a simple, multi-user image moderation platform for Trust & Safety professionals." />
+    <meta name="author" content="Jeremy Malcolm" />
+    <link rel="shortcut icon" href="favicon.ico" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Lato:300,400,300italic,400italic"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Montserrat:400,700"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <!-- FontAwesome JS-->
+    <script
+      defer
+      src="{{ url_for('static', filename='assets/fontawesome/js/all.min.js')}}"
+    ></script>
+    <!-- Global CSS -->
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='assets/plugins/bootstrap/css/bootstrap.min.css')}}"
+    />
+    <!-- Plugins CSS -->
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='assets/plugins/prism/prism.css')}}"
+    />
+    <!-- Theme CSS -->
+    <link
+      id="theme-style"
+      rel="stylesheet"
+      href="{{ url_for('static', filename='assets/css/theme-4.css')}}"
+    />
+    <!-- GitHub Button -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+  </head>
+
+  <body data-spy="scroll">
+    <!---//Facebook button code-->
+    <div id="fb-root"></div>
+    <script>
+      (function (d, s, id) {
+        var js,
+          fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.0";
+        fjs.parentNode.insertBefore(js, fjs);
+      })(document, "script", "facebook-jssdk");
+    </script>
+
+    <!-- ******HEADER****** -->
+    <header id="header" class="header">
+      <nav id="main-nav" class="main-nav navbar navbar-expand-md">
+        <div class="container-fluid">
+          <a class="navbar-brand logo scrollto" href="#promo">
+            <span class="logo-title">Modtools Image</span>
+          </a>
+
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbar-collapse"
+            aria-controls="navbar-collapse"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span></button
+          ><!--//nav-toggle-->
+
+          <div class="navbar-collapse collapse" id="navbar-collapse">
+            <ul id="nav-menu" class="nav navbar-nav ms-md-auto">
+              <li class="nav-item sr-only">
+                <a class="nav-link scrollto" href="#promo">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link scrollto" href="#about">About</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link scrollto" href="#features">Features</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link scrollto" href="#docs">Docs</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link scrollto" href="#license">License</a>
+              </li>
+              <li class="nav-item last">
+                <a class="nav-link scrollto" href="#contact">Contact</a>
+              </li>
+            </ul>
+            <!--//nav-->
+          </div>
+          <!--//navabr-collapse-->
+        </div>
+      </nav>
+      <!--//main-nav-->
+    </header>
+    <!--//header-->
+
+    <!-- ******PROMO****** -->
+    <section id="promo" class="promo section offset-header">
+      <div class="container text-center">
+        <h2 class="title">Modtools<wbr><span class="highlight">Image</span></h2>
+        <p class="intro">
+          A simple, multi-user image moderation platform for Trust & Safety professionals
+        </p>
+        <div class="btns">
+          <a class="btn btn-cta-secondary" href="/dashboard">Demo</a>
+          <a
+            class="btn btn-cta-primary"
+            href="https://github.com/qirtaiba/modtools"
+            target="_blank"
+            >Download</a
+          >
+        </div>
+        <ul class="meta list-inline">
+          <li class="list-inline-item">
+            <p>Demo username and password: "demo"</p>
+          </li>        <!--//meta-->
+        </ul>
+      </div>
+      <!--//container-->
+      <div class="social-media">
+        <div class="social-media-inner container text-center">
+          <ul class="list-inline mb-2">
+            <li class="list-inline-item twitter-follow">
+              <a
+                href="https://twitter.com/qirtaiba"
+                class="twitter-follow-button"
+                data-show-count="false"
+                >Follow @qirtaiba</a
+              >
+              <script>
+                !(function (d, s, id) {
+                  var js,
+                    fjs = d.getElementsByTagName(s)[0],
+                    p = /^http:/.test(d.location) ? "http" : "https";
+                  if (!d.getElementById(id)) {
+                    js = d.createElement(s);
+                    js.id = id;
+                    js.src = p + "://platform.twitter.com/widgets.js";
+                    fjs.parentNode.insertBefore(js, fjs);
+                  }
+                })(document, "script", "twitter-wjs");
+              </script>
+            </li>
+            <!--//twitter-follow-->
+            <li class="list-inline-item twitter-tweet">
+              <a
+                href="https://twitter.com/share"
+                class="twitter-share-button"
+                data-via="qirtaiba"
+                data-hashtags="bootstrap"
+                >Tweet</a
+              >
+              <script>
+                !(function (d, s, id) {
+                  var js,
+                    fjs = d.getElementsByTagName(s)[0],
+                    p = /^http:/.test(d.location) ? "http" : "https";
+                  if (!d.getElementById(id)) {
+                    js = d.createElement(s);
+                    js.id = id;
+                    js.src = p + "://platform.twitter.com/widgets.js";
+                    fjs.parentNode.insertBefore(js, fjs);
+                  }
+                })(document, "script", "twitter-wjs");
+              </script>
+            </li>
+            <!--//twitter-tweet-->
+            <!--<li class="list-inline-item facebook-like">
+              <div
+                class="fb-like"
+                data-href="https://themes.3rdwavemedia.com/"
+                data-layout="button_count"
+                data-action="like"
+                data-show-faces="false"
+                data-share="false"
+              ></div>
+            </li>
+            //facebook-like-->
+            <!--// Generate github buttons: https://github.com/mdo/github-buttons -->
+            <li class="list-inline-item github-star">
+              <a
+                class="github-button"
+                href="https://github.com/qirtaiba/modtools"
+                data-icon="octicon-star"
+                aria-label="Star qirtaiba/modtools on GitHub"
+                >Star</a
+              >
+            </li>
+            <li class="list-inline-item github-follow">
+              <!-- Place this tag where you want the button to render. -->
+              <a
+                class="github-button"
+                href="https://github.com/qirtaiba"
+                aria-label="Follow @qirtaiba on GitHub"
+                >Follow @qirtaiba</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+    <!--//promo-->
+
+    <!-- ******ABOUT****** -->
+    <section id="about" class="about section">
+      <div class="container">
+        <h2 class="title text-center">What is Modtools Image?</h2>
+        <p class="intro text-center">
+          Modtools Image is a simple, multi-user image moderation platform for
+          Trust & Safety professionals. It has the capacity to receive images
+          and associated metadata through a JSON web service, to scan them using
+          one or more specified vendor APIs, and to initiate follow-up actions.
+          Both the scanning APIs and the actions use an extensible plugin
+          architecture.
+        </p>
+        <div class="row">
+          <div class="item col-lg-4 col-md-6 col-12">
+            <div class="icon-holder">
+              <i class="fa-solid fa-image"></i>
+            </div>
+            <div class="content">
+              <h3 class="sub-title">Image moderation dashboard</h3>
+              <p>
+                Includes a basic image moderation dashboard for human review and
+                actioning of submitted images. Actions available to moderators
+                through the dashboard are fully configurable.
+              </p>
+            </div>
+            <!--//content-->
+          </div>
+          <!--//item-->
+          <div class="item col-lg-4 col-md-6 col-12">
+            <div class="icon-holder">
+              <i class="fa-solid fa-filter"></i>
+            </div>
+            <div class="content">
+              <h3 class="sub-title">Smart filtering</h3>
+              <p>
+                Filter images based on metadata such as the results of automatic
+                scans. Moderators only need to spend their time reviewing images
+                already identified as suspicious.
+              </p>
+            </div>
+            <!--//content-->
+          </div>
+          <!--//item-->
+          <div class="item col-lg-4 col-md-6 col-12">
+            <div class="icon-holder">
+              <i class="fa-solid fa-eye-slash"></i>
+            </div>
+            <div class="content">
+              <h3 class="sub-title">Headless mode</h3>
+              <p>
+                Can also be run in a server-only mode for automatic scanning
+                and actioning of images that match a defined threshold or
+                event, with the ability to query actions taken.
+              </p>
+            </div>
+            <!--//content-->
+          </div>
+          <!--//item-->
+          <div class="item col-lg-4 col-md-6 col-12">
+            <div class="icon-holder">
+              <i class="fa-solid fa-crosshairs"></i>
+            </div>
+            <div class="content">
+              <h3 class="sub-title">Extensible plugin architecture</h3>
+              <p>
+                Out of the box, comes with integration of support for Hive AI
+                image classification, PhotoDNA hash scanning, email alerting, 
+                and reporting to NCMEC (own credentials required).
+              </p>
+            </div>
+            <!--//content-->
+          </div>
+          <!--//item-->
+          <div class="item col-lg-4 col-md-6 col-12">
+            <div class="icon-holder">
+              <i class="fa-solid fa-users"></i>
+            </div>
+            <div class="content">
+              <h3 class="sub-title">Multi-user capable</h3>
+              <p>
+                User authentication leverages Flask-Login. Admins can invite,
+                promote, degrade, or remove users, maintaining robust control
+                over who can access the system.
+              </p>
+            </div>
+            <!--//content-->
+          </div>
+          <!--//item-->
+          <div class="item col-lg-4 col-md-6 col-12">
+            <div class="icon-holder">
+              <i class="fa-solid fa-code"></i>
+            </div>
+            <div class="content">
+              <h3 class="sub-title">Permissive license</h3>
+              <p>
+                Built on Flask, and licensed under the permissive MIT license.
+                Integrate it into your own systems without the risk of
+                being required to share your own proprietary code.
+              </p>
+            </div>
+            <!--//content-->
+          </div>
+          <!--//item-->
+        </div>
+        <!--//row-->
+      </div>
+      <!--//container-->
+    </section>
+    <!--//about-->
+
+    <!-- ******FEATURES****** -->
+    <section id="features" class="features section">
+      <div class="container text-center">
+        <h2 class="title">Screenshot</h2>
+          <img class="img-fluid" src="{{ url_for('static', filename='assets/images/screenshot.png')}}" alt="" />
+      </div>
+      <!--//container-->
+    </section>
+    <!--//features-->
+
+    <!-- ******DOCS****** -->
+    <section id="docs" class="docs section">
+      <div class="container">
+        <div class="docs-inner">
+          <h2 class="title text-center">Get Started</h2>
+            
+          <div class="block">
+            <h3 class="sub-title text-center">Clone the repository</h3>
+            <div class="code-block">
+              <!--//Use Prismjs - http://prismjs.com/index.html#basic-usage -->
+              <pre><code class="language-bash">
+git clone https://github.com/qirtaiba/modtools
+                     </code></pre>
+            </div>
+            <!--//code-block-->
+          </div>
+          <!--//block-->
+
+          <div class="block">
+            <h3 class="sub-title text-center">Set up a virtual environment</h3>
+
+            <div class="code-block">
+              <!--//Use Prismjs - http://prismjs.com/index.html#basic-usage -->
+              <pre>
+    <code class="language-bash">
+python3 -m venv venv
+source venv/bin/activate  # For Unix/Linux/MacOS
+venv\Scripts\activate  # For Windows
+    </code></pre>
+            </div>
+            <!--//code-block-->
+          </div>
+          <!--//block-->
+
+          <div class="block">
+            <h3 class="sub-title text-center">Install Dependencies</h3>
+            <div class="code-block">
+              <pre><code class="language-bash">
+pip install -r requirements.txt
+                    </code></pre>
+            </div>
+            <!--//code-block-->
+          </div>
+          <!--//block-->
+
+          <div class="block">
+            <h3 class="sub-title text-center">Or simply use Docker</h3>
+            <div class="code-block">
+              <pre><code class="language-bash">
+docker pull qirtaiba/modtools
+docker run -p 7000:7000 -e ENV_VARIABLE_NAME=value modtools
+                    </code></pre>
+            </div>
+            <!--//code-block-->
+          </div>
+
+          <div class="block">
+              <h3 class="sub-title text-center">Full Documentation</h3>
+              <p>For additional setup steps including setting environment variables, please consult the README file on Github.</p>
+              <p class="text-center">
+                  <a class="btn btn-cta-primary" href="https://github.com/qirtaiba/modtools" target="_blank">More on GitHub</a>
+              </p>
+          </div><!--//block-->
+            
+        </div>
+        <!--//docs-inner-->
+      </div>
+      <!--//container-->
+    </section>
+    <!--//features-->
+
+    <!-- ******LICENSE****** -->
+    <section id="license" class="license section">
+      <div class="container">
+        <div class="license-inner">
+          <h2 class="title text-center">MIT License</h2>
+          <div class="info">
+            <p>
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
+
+<p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
+
+<p>THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+            </p>
+          </div>
+          <!--//info
+          <div class="cta-container">
+            <div class="speech-bubble">
+              <p class="intro">
+                If you want to
+                <strong
+                  >use this template without the footer attribution link</strong
+                >, you can
+                <a
+                  href="https://themes.3rdwavemedia.com/bootstrap-templates/startup/devaid-free-bootstrap-theme-for-developers-side-projects/"
+                  target="_blank"
+                  >buy the commercial license</a
+                >
+                via my website. Thank you for your support!
+              </p>
+              <div class="icon-holder text-center">
+                <i class="far fa-smile"></i>
+              </div>
+            </div>-->
+            <!--//speech-bubble-->
+            <div class="btn-container text-center">
+              <a
+                class="btn btn-cta-secondary"
+                href="https://www.blockonomics.co/pay-url/b847be49b6644e8a"
+                target="_blank"
+                >Donate</a
+              >
+            </div>
+            <!--//btn-container-->
+          </div>
+          <!--//cta-container-->
+        </div>
+        <!--//license-inner-->
+      </div>
+      <!--//container-->
+    </section>
+    <!--//how-->
+
+    <!-- ******CONTACT****** -->
+    <section id="contact" class="contact section has-pattern">
+      <div class="container">
+        <div class="contact-inner">
+          <h2 class="title text-center">Contact</h2>
+          <p class="intro text-center">
+            Feel free to get in touch with questions, suggestions, or requests for customizations or support.
+          </p>
+          <div class="author-message">
+            <div class="profile">
+              <img class="img-fluid" src="{{ url_for('static', filename='assets/images/profile.png')}}" alt="" />
+            <!--FIXME add image-->
+            </div>
+            <!--//profile-->
+            <div class="speech-bubble">
+              <h3 class="sub-title">
+                Note: Modtools Image is pre-release software
+              </h3>
+              <p>
+                Please note that Modtools Image is currently in the early stages
+                of development. Some features and documentation are missing or
+                incomplete. This pre-release is being provided for the purpose
+                of inspiring a community of developers to join us to realize the
+                vision of an open source image moderation tool that integrates 
+                popular APIs for screening out adult content and CSAM. 
+              </p>
+              <div class="source">
+                <span class="name"><a href="https://jere.my" target="_blank">Jeremy Malcolm</a></span>
+                <br />
+                <span class="title">Trust & Safety Consultant</span>
+              </div><!--//source-->
+            </div><!--//speech-bubble-->
+          </div>
+          <!--//author-message-->
+          <div class="info text-center">
+            <h4 class="sub-title">Get Connected</h4>
+            <ul class="social-icons list-inline">
+              <li class="list-inline-item">
+                <a href="https://twitter.com/qirtaiba" target="_blank"
+                  ><i class="fab fa-twitter"></i
+                ></a>
+              </li>
+              <!--<li class="list-inline-item">
+                <a href="https://www.facebook.com/3rdwavethemes" target="_blank"
+                  ><i class="fab fa-facebook-f"></i
+                ></a>
+              </li>-->
+
+              <li class="list-inline-item">
+                <a href="https://medium.com/@qirtaiba/" target="_blank"
+                  ><i class="fab fa-medium-m"></i
+                ></a>
+              </li>
+              <!--<li class="list-inline-item">
+                <a href="https://dribbble.com/Xiaoying" target="_blank"
+                  ><i class="fab fa-dribbble"></i
+                ></a>
+              </li>-->
+              <li class="list-inline-item last">
+                <a
+                  href="https://jere.my/"
+                  target="_blank"
+                  ><i class="fas fa-envelope"></i
+                ></a>
+              </li>
+            </ul>
+          </div>
+          <!--//info-->
+        </div>
+        <!--//contact-inner-->
+      </div>
+      <!--//container-->
+    </section>
+    <!--//contact-->
+
+    <!-- ******FOOTER****** -->
+    <footer class="footer">
+      <div class="container text-center">
+        <!--/* This template is free as long as you keep the footer attribution link. If you'd like to use the template without the attribution link, you can buy the commercial license via our website: themes.3rdwavemedia.com Thank you for your support. :) */-->
+        <small class="copyright"
+          >Designed with <span class="sr-only">love</span
+          ><i class="fas fa-heart"></i> by
+          <a href="https://themes.3rdwavemedia.com" target="_blank"
+            >Xiaoying Riley</a
+          >
+          for developers</small
+        >
+      </div>
+      <!--//container-->
+    </footer>
+    <!--//footer-->
+
+    <!-- Javascript -->
+    <script src="{{ url_for('static', filename='assets/plugins/bootstrap/js/bootstrap.min.js')}}"></script>
+    <script src="{{ url_for('static', filename='assets/plugins/prism/prism.js')}}"></script>
+    <script src="{{ url_for('static', filename='assets/plugins/gumshoe/gumshoe.polyfills.min.js')}}"></script>
+    <script src="{{ url_for('static', filename='assets/js/main.js')}}"></script>
+  </body>
+</html>

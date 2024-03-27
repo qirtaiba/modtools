@@ -1,0 +1,102 @@
+{% extends "base.html" %} {% block title %}Sample{% endblock %}
+{% block content %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script>
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+  <!-- Page Heading -->
+  {%if not invitation_status %}
+  <h1 class="h3 mb-2 text-gray-800 mb-4"> Manage users</h1>
+  {% else %}
+  <h1 class="h3 mb-2 text-gray-800 mb-4"> Manage users, {{invitation_status}}</h1>
+  {% endif %}
+  <!-- DataTales -->
+  <div class="card shadow mb-4">
+    <div class="card-header d-flex  py-3">
+      <div id="dataTable_filter" class="dataTables_filter">
+        <form id="inviteForm" action="/invite" method="POST">
+          <label>
+            <input type="search" name="email" class="form-control form-control-sm" placeholder="example@gmail.com"
+              aria-controls="dataTable">
+          </label>
+          <button type="submit" class="btn btn-primary btn-icon-split">
+            <span class="icon text-white-50">
+              <i class="fas fa-plus"></i>
+            </span>
+            <span class="text">Invite</span>
+          </button>
+        </form>
+      </div>
+
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+          <thead>
+            <tr>
+              <th>Email address</th>
+              <th>Status</th>
+              <th>Kick</th>
+              <th>Authority</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {% for user in users %}
+            <tr class="odd">
+
+              <td>{{user.email}}</td>
+              <td>{% if user.role %}
+                {{ user.role.capitalize() }}
+                {% else %}
+                <!-- Handle the case when user.role is None or an empty string -->
+                N/A
+                {% endif %}
+              </td>
+              <td><a target="_self" href="/kick/{{user.id}}">Kick</a></td>
+              <td>{% if user.role == 'moderator' %}
+                <a target="_self" href="/promote/{{ user.id }}">Promote</a>
+                {% elif user.role == 'admin' %}
+                <a target="_self" href="/degrade/{{ user.id }}">Degrade</a>
+                {% else %}
+                <!-- Handle other cases if needed -->
+                N/A
+                {% endif %}
+              </td>
+
+              {% endfor %}
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>
+<!-- /.container-fluid -->
+
+</div>
+<!-- End of Main Content -->
+
+{% endblock %}
+
+{% block css %}
+<style>
+  .clickable-row:hover {
+    background-color: #cccccc;
+    cursor: pointer;
+  }
+</style>
+{% endblock %}
+
+{% block js %}
+
+<!-- Page level plugins -->
+<script src="{{ url_for('static', filename='vendor/datatables/jquery.dataTables.min.js')}}"></script>
+<script src="{{ url_for('static', filename='vendor/datatables/dataTables.bootstrap4.min.js')}}"></script>
+
+<!-- Page level custom scripts -->
+<script src="{{ url_for('static', filename='js/demo/datatables-demo.js')}}"></script>
+{% endblock %}

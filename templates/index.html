@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Image filtering application</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="{{url_for('static', filename='assets/favicon.ico')}}" />
+    <!-- Bootstrap icons-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" type="text/css" />
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="{{url_for('static', filename='css/sb-admin-2.min.css')}}" rel="stylesheet" />
+    <style>
+         @media (min-width: 768px) {
+            .desktop-padding {
+                margin-left: -3rem;
+            }
+        }
+        @media (max-width: 576px) {
+            .flex-md-row-reverse {
+                flex-direction: column-reverse;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation-->
+    <nav class="navbar navbar-light bg-light static-top">
+        <div class="container">
+            <a class="navbar-brand" href="#!">CSAM reporting site</a>
+            <a class="btn btn-primary" href="/login">Log In</a>
+        </div>
+    </nav>
+
+    <!-- Content -->
+    <div class="container mt-5">
+        <div class="row flex-md-row-reverse justify-content-between">
+       
+            <!-- Text Column (50%) -->
+            <div class="col-12 col-lg-6 d-flex flex-column justify-content-center">
+                <h1 class="text-gray-800 text-center">Welcome To CSAM reporting site</h1>
+                <p> Simple image review platform for moderators.</p>
+            </div>
+               <!-- Image Column (50%) -->
+            <div class="col-12 col-lg-6 pr-lg-5">
+                <img src="{{url_for('static', filename='img/index.jpg')}}" alt="Image" class="img-fluid">
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap core JS-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Core theme JS-->
+    <script src="{{url_for('static', filename='js/scripts.js')}}"></script>
+</body>
+</html>
