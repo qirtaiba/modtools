@@ -31,7 +31,7 @@ class User(UserMixin):
 from datetime import datetime
 
 class Image:
-    def __init__(self, id, user_id, image_url, photodna_results=None, hiveai_results=None, status='pending',
+    def __init__(self, id, image_url, user_id=None,  photodna_results=None, hiveai_results=None, status='pending',
                  created_at=None, updated_at=None, incident_time=None,
                  reportee_name=None, reportee_ip_address=None, username=None,
                  latitude=None, longitude=None, altitude=None):

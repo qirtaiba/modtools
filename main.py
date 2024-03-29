@@ -14,14 +14,14 @@ from actions import get_action_manager
 photo_path = "photo.jpg"
 photo_scan_app=initialize_photo_scan_app()
 
-def test():
-  photo_path ="https://s3.amazonaws.com/docs.thehive.ai/client_demo/moderation_image.png"  
-  photo_scan_app=initialize_photo_scan_app()
-  analysis_results = photo_scan_app.scan_photo(photo_path)
-  for analysis in analysis_results:
-      print(analysis)
+# def test():
+#   photo_path ="https://s3.amazonaws.com/docs.thehive.ai/client_demo/moderation_image.png"  
+#   photo_scan_app=initialize_photo_scan_app()
+#   analysis_results = photo_scan_app.scan_photo(photo_path)
+#   for analysis in analysis_results:
+#       print(analysis)
 
-test()
+# test()
 
 # Setting up Flask
 app = Flask(__name__)

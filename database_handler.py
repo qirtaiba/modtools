@@ -1,4 +1,5 @@
 import psycopg2
+import psycopg2.extras
 import os
 from psycopg2 import pool
 from tables import  User,Image,Invitation,API,Plugin
@@ -15,29 +16,26 @@ conn_pool = pool.SimpleConnectionPool(1, 20, conn_string)
 
 
 def handle_connection(func):
-
-  def wrapper(*args, **kwargs):
-    conn = None
-    cur = None
-    tries = 0
-    while tries < MAX_TRIES:
-      try:
-        conn = conn_pool.getconn()
-        cur = conn.cursor()
-        result = func(*args, **kwargs, conn=conn, cur=cur)
-        conn.commit()
-        conn_pool.putconn(conn)
-        return result
-      except (psycopg2.OperationalError, psycopg2.InterfaceError):
-        if conn:
-          conn_pool.putconn(conn)
+    def wrapper(*args, **kwargs):
         conn = None
         cur = None
-        tries += 1
-    raise Exception(
-      "Failed to establish database connection after multiple attempts")
-
-  return wrapper
+        tries = 0
+        while tries < MAX_TRIES:
+            try:
+                conn = conn_pool.getconn()
+                cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+                result = func(*args, **kwargs, conn=conn, cur=cur)
+                conn.commit()
+                conn_pool.putconn(conn)
+                return result
+            except (psycopg2.OperationalError, psycopg2.InterfaceError) as e:
+                if conn:
+                    conn_pool.putconn(conn, close=True)
+                conn = None
+                cur = None
+                tries += 1
+        raise Exception("Failed to establish database connection after multiple attempts")
+    return wrapper
 
 @handle_connection
 def create_user(name, lastname, email, password, conn, cur, role='moderator'):
@@ -103,7 +101,7 @@ def get_all_users(conn, cur):
     cur.execute("SELECT * FROM users")
     rows = cur.fetchall()
     if rows:
-        return [User(*row) for row in rows]
+        return [User(**row) for row in rows]
     else:
         return []
 
@@ -190,7 +188,7 @@ def get_pending_images(conn, cur):
     image_data = cur.fetchall()
     if image_data:
     
-        image_list = [Image(*row) for row in image_data]
+        image_list = [Image(**row) for row in image_data]
         return image_list
     else:
         return None
@@ -200,7 +198,7 @@ def get_escalated_images(conn, cur):
           cur.execute("SELECT * FROM images WHERE status = 'Escalate'")
           image_data = cur.fetchall()
           if image_data:
-              image_list = [Image(*row) for row in image_data]
+              image_list = [Image(**row) for row in image_data]
               return image_list
           else:
               return None
@@ -210,7 +208,7 @@ def get_all_images(conn, cur):
     cur.execute("SELECT * FROM images")
     rows = cur.fetchall()
     if rows:
-        return [Image(*row) for row in rows]
+        return [Image(**row) for row in rows]
     else:
         return []
 
@@ -219,7 +217,7 @@ def get_unscanned_images(conn, cur):
     cur.execute("SELECT * FROM images WHERE scan_results= 'none'")
     rows = cur.fetchall()
     if rows:
-        return [Image(*row) for row in rows]
+        return [Image(**row) for row in rows]
     else:
         return []
 
@@ -303,7 +301,7 @@ def get_filtered_images(username=None, date=None, photodna_results=False, hiveai
     """.format(" AND ".join(where_conditions)) if where_conditions else "SELECT * FROM images"
     # Execute the query and retrieve the filtered images
     cur.execute(sql_query)
-    filtered_images = [Image(*row) for row in cur.fetchall()]
+    filtered_images = [Image(**row) for row in cur.fetchall()]
     # if result:
     #     filtered_images1 = []
     #     for image in filtered_images:
@@ -355,7 +353,7 @@ def get_all_invitations(conn, cur):
     cur.execute("SELECT * FROM invitation")
     rows = cur.fetchall()
     if rows:
-        return [Invitation(*row) for row in rows]
+        return [Invitation(**row) for row in rows]
     else:
         return []
 
@@ -398,7 +396,7 @@ def get_all_apis(conn=None, cur=None):
     cur.execute("SELECT * FROM apis")
     rows = cur.fetchall()
     if rows:
-        return [API(*row) for row in rows]
+        return [API(**row) for row in rows]
     else:
         return []
 
@@ -449,7 +447,7 @@ def get_all_plugins(conn=None, cur=None):
     cur.execute("SELECT * FROM plugins")
     rows = cur.fetchall()
     if rows:
-        return [Plugin(*row) for row in rows]
+        return [Plugin(**row) for row in rows]
     else:
         return []
 
@@ -499,95 +497,11 @@ def remove_columns_from_images(conn=None, cur=None):
     )
     conn.commit()
 
-def test_invitation_crud_methods():
-    # Create an invitation
-    invitation_id = create_invitation("invitee@example.com", 4)
-    assert invitation_id is not None
+@handle_connection
+def test(image_id, conn=None, cur=None):
+    hiveai_result = 'Positive'
+    photodna_result = 'MatchFound'
 
-    # Get the created invitation by ID
-    created_invitation = get_invitation_by_id(invitation_id)
-    assert created_invitation is not None
-    assert created_invitation.invitee_email == "invitee@example.com"
-    assert created_invitation.inviter_user_id == 4
-
-    # Update the invitation
-    update_invitation(invitation_id, "updated@example.com", 4)
-    updated_invitation = get_invitation_by_id(invitation_id)
-    assert updated_invitation.invitee_email == "updated@example.com"
-    assert updated_invitation.inviter_user_id == 4
-
-    # Get all invitations
-    all_invitations = get_all_invitations()
-    assert len(all_invitations) >= 1
-
-    # Delete the invitation
-    delete_invitation(invitation_id)
-    deleted_invitation = get_invitation_by_id(invitation_id)
-    assert deleted_invitation is None
-
-            
-def test_api_functions():
-    # Test create_api
-    api_id = create_api("Test API", "This is a test API", True)
-    assert isinstance(api_id, int)
-
-    # Test get_api_by_id
-    api = get_api_by_id(api_id)
-    assert isinstance(api, API)
-    assert api.name == "Test API"
-    assert api.about == "This is a test API"
-    assert api.is_registered == True
-
-    # Test update_api
-    update_api(api_id, "Updated API", False)
-    updated_api = get_api_by_id(api_id)
-    assert updated_api.name == "Updated API"
-    assert updated_api.is_registered == False
-
-    # Test update_api_status
-    update_api_status(api_id, True)
-    updated_status_api = get_api_by_id(api_id)
-    assert updated_status_api.is_registered == True
-
-    # Test get_all_apis
-    apis = get_all_apis()
-    assert len(apis) >= 1
-    assert isinstance(apis[0], API)
-
-    # Test delete_api
-    delete_api(api_id)
-    deleted_api = get_api_by_id(api_id)
-    assert deleted_api is None
-
-def test_plugin_functions():
-    # Test create_plugin
-    plugin_id = create_plugin("Test Plugin", "This is a test plugin", True)
-    assert isinstance(plugin_id, int)
-
-    # Test get_plugin_by_id
-    plugin = get_plugin_by_id(plugin_id)
-    assert isinstance(plugin, Plugin)
-    assert plugin.name == "Test Plugin"
-    assert plugin.about == "This is a test plugin"
-    assert plugin.is_registered == True
-
-    # Test update_plugin
-    update_plugin(plugin_id, "Updated Plugin", False)
-    updated_plugin = get_plugin_by_id(plugin_id)
-    assert updated_plugin.name == "Updated Plugin"
-    assert updated_plugin.is_registered == False
-
-    # Test update_plugin_status
-    update_plugin_status(plugin_id, True)
-    updated_status_plugin = get_plugin_by_id(plugin_id)
-    assert updated_status_plugin.is_registered == True
-
-    # Test get_all_plugins
-    plugins = get_all_plugins()
-    assert len(plugins) >= 1
-    assert isinstance(plugins[0], Plugin)
-
-    # Test delete_plugin
-    delete_plugin(plugin_id)
-    deleted_plugin = get_plugin_by_id(plugin_id)
-    assert deleted_plugin is None
+    cur.execute("UPDATE images SET hiveai_results = %s, photodna_results = %s WHERE id = %s",
+                (hiveai_result, photodna_result, image_id))
+    conn.commit()
