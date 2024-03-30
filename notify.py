@@ -3,22 +3,21 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.application import MIMEApplication
 import os
-os.environ["BASE_URL"]="https://filter.markopavlovic.repl.co"
 
 def welcome_new_user(to_email, from_email=os.environ["EMAIL_SENDER"], from_password=os.environ["EMAIL_PASSWORD"]):
     base_url = os.environ["BASE_URL"]
     msg = MIMEMultipart()
     msg['From'] = from_email
     msg['To'] = to_email
-    msg['Subject'] = "Invitation to join CSAM filtering"
+    msg['Subject'] = "Invitation to join Modtools Image"
 
     html_body = f"""
     <html>
         <body>
-            <h2>You are invited to join CSAM filtering!</h2>
+            <h2>You are invited to join Modtools Image!</h2>
             <p>Click <a href="{base_url}/register">here</a> to register for an account!</p>
             <p>Best regards,</p>
-            <p>The CSAM filtering Team</p>
+            <p>The Modtools Image Team</p>
         </body>
     </html>
     """
