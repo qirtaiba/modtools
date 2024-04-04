@@ -157,7 +157,7 @@ This project is licensed under the MIT License.
 For any inquiries or support, please raise an issue in the repository's issue tracker.
 
 
-## API for submitting images, reading their status and  
+## API for submitting images, reading their status and making a report action
 
 ## About the HiveAI API JSON object
     The object returned by the HiveAI API represents the analysis result of a photo. It contains information about the status of the analysis and the output of the analysis. The response field contains an array of analysis results for each image provided. Each analysis result contains information about the classes detected in the image and the corresponding scores.
@@ -186,7 +186,7 @@ For any inquiries or support, please raise an issue in the repository's issue tr
 
     The initialize_photo_scan_app function initializes the PhotoScanApp class and registers the HiveAI_Plugin and PhotoDNA_Plugin instances as plugins. It returns the initialized PhotoScanApp object.
 
-## About the PhotoDNA action API JSON object
+## About the PhotoDNA report action API JSON object
     The PhotoDNA_report_action class is an action class specifically for reporting violations using the PhotoDNA service. It requires a reporter name and email address for initialization. The perform_action method takes image data as input. It reads the image file specified by the image URL, encodes it in base64 format, and sends a request to the PhotoDNA service to report the violation. The request includes various metadata such as the reporter's information, incident time, reportee information, and violation content.
         "OrgName":Organization submitting the image
         "ReporterName": Name of the reporter of the image
@@ -207,7 +207,7 @@ For any inquiries or support, please raise an issue in the repository's issue tr
                     }
                     ],
 
-    Headers of this request hold following key values obtained at PhotoDNA:
+    Headers of this request hold following key values obtained at :
             "Ocp-Apim-Subscription-Key": PhotoDNA api key
             "x-user": username on the PhotoDNA platform
             "x-pwd":  password on the PhotoDNA platform
