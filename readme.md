@@ -138,7 +138,7 @@ ModTools Image is available on Docker Hub as `qirtaiba/modtools`. You can get it
 Modtools Image is currently in the early stages of development. Many features are missing, undocumented, or incomplete. These include:
 
 * Configuration options for the plugins and APIs are not implemented in the web interface.
-* The JSON API for submitting images and querying their status is undocumented.
+* The JSON API for submitting images and querying their status has not been implemented.
 * The email alerting plugin, intended to send email alerts when a specified scan result is received, has not been implemented.
 * Filtering based on the numerical value of HiveAI score has not been implemented.
 
