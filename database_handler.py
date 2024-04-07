@@ -5,14 +5,14 @@ from psycopg2 import pool
 from tables import  User,Image,Invitation,API,Plugin
 import json
 from datetime import datetime
+from dotenv import load_dotenv
+import time
+load_dotenv()
 
 MAX_TRIES = 5
-
-# Create a connection string
 conn_string = os.environ["DATABASE_URL"]
-# Create an engine
 conn = psycopg2.connect(conn_string)
-conn_pool = pool.SimpleConnectionPool(1, 20, conn_string)
+conn_pool = psycopg2.pool.SimpleConnectionPool(1, 50, conn_string)
 
 
 def handle_connection(func):
@@ -25,6 +25,8 @@ def handle_connection(func):
                 conn = conn_pool.getconn()
                 cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
                 result = func(*args, **kwargs, conn=conn, cur=cur)
+                # Keep the connection alive by executing a SELECT 1 query
+                cur.execute("SELECT 1;")
                 conn.commit()
                 conn_pool.putconn(conn)
                 return result
@@ -33,7 +35,12 @@ def handle_connection(func):
                     conn_pool.putconn(conn, close=True)
                 conn = None
                 cur = None
+                
+                # Reconnect to the database, wait for a while, and retry
+                time.sleep(1)
+                
                 tries += 1
+
         raise Exception("Failed to establish database connection after multiple attempts")
     return wrapper
 
@@ -145,18 +152,30 @@ def drop_users_table(conn, cur):
   cur.execute("DROP TABLE IF EXISTS users")
   conn.commit()
 
-#====================================
-
 @handle_connection
-def create_image(user_id, image_url, scan_results, status,
+def read_table_columns(conn, cur):
+    cur.execute("SELECT column_name \
+                 FROM information_schema.columns \
+                 WHERE table_schema = 'public' \
+                 AND table_name = 'images';")
+    result = cur.fetchall()  # Fetch all rows
+    for row in result:
+        print(row)
+    conn.commit()
+
+#====================================
+@handle_connection
+def create_image(user_id, image_url, status,
                  incident_time, reportee_name, reportee_ip_address, username, location,
                  conn, cur):
     try:
+        photodna_results = None
+        hiveai_results = None
         cur.execute(
-            "INSERT INTO images (user_id, image_url, scan_results, "
+            "INSERT INTO images (user_id, image_url, photodna_results, hiveai_results, "
             "status, incident_time, reportee_name, reportee_ip_address, username, "
-            "latitude, longitude, altitude) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING id",
-            (user_id, image_url, scan_results,
+            "latitude, longitude, altitude, created_at) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, CURRENT_TIMESTAMP) RETURNING id",
+            (user_id, image_url, photodna_results, hiveai_results,
              status, incident_time, reportee_name, reportee_ip_address, username, 
              location.get("latitude", ""), location.get("longitude", ""),
              location.get("altitude", ""))
@@ -178,7 +197,7 @@ def get_image_by_id(image_id, conn, cur):
     cur.execute("SELECT * FROM images WHERE id = %s", (image_id,))
     image_data = cur.fetchone()
     if image_data:
-        return Image(*image_data)
+        return Image(**image_data)
     else:
         return None
 
@@ -187,7 +206,7 @@ def get_pending_images(conn, cur):
     cur.execute("SELECT * FROM images WHERE status = 'pending'")
     image_data = cur.fetchall()
     if image_data:
-    
+
         image_list = [Image(**row) for row in image_data]
         return image_list
     else:
@@ -195,13 +214,20 @@ def get_pending_images(conn, cur):
 
 @handle_connection
 def get_escalated_images(conn, cur):
-          cur.execute("SELECT * FROM images WHERE status = 'Escalate'")
-          image_data = cur.fetchall()
-          if image_data:
-              image_list = [Image(**row) for row in image_data]
-              return image_list
-          else:
-              return None
+    cur.execute("SELECT * FROM images WHERE status = 'Escalate'")
+    image_data = cur.fetchall()
+    if image_data:
+        image_list = [Image(**row) for row in image_data]
+        return image_list
+    else:
+        return None
+
+@handle_connection
+def alter_images(conn, cur):
+    cur.execute("ALTER TABLE images\
+                 ADD COLUMN user_id INTEGER DEFAULT NULL;")
+    conn.commit()  # Commit the changes to the database
+    print("Column 'user_id' added successfully.")
 
 @handle_connection
 def get_all_images(conn, cur):
@@ -224,16 +250,16 @@ def get_unscanned_images(conn, cur):
 
 
 @handle_connection
-def update_image(image_id, user_id, image_url, scan_results, status,
+def update_image(image_id, user_id, image_url, photodna_results, hiveai_results, status,
                  incident_time, reportee_name, reportee_ip_address, username, location,
                  conn, cur):
     cur.execute(
         "UPDATE images SET user_id = %s, image_url = %s, "
-        "scan_results = %s, status = %s, updated_at = CURRENT_TIMESTAMP, "
+        "photodna_results = %s, hiveai_results = %s, status = %s, updated_at = CURRENT_TIMESTAMP, "
         "incident_time = %s, reportee_name = %s, reportee_ip_address = %s, username = %s, "
         "latitude = %s, longitude = %s, altitude = %s "
         "WHERE id = %s",
-        (user_id, image_url, scan_results,
+        (user_id, image_url, photodna_results, hiveai_results,
          status, incident_time, reportee_name, reportee_ip_address, username, 
          location.get("latitude", ""), location.get("longitude", ""),
          location.get("altitude", ""), image_id)
@@ -505,3 +531,20 @@ def test(image_id, conn=None, cur=None):
     cur.execute("UPDATE images SET hiveai_results = %s, photodna_results = %s WHERE id = %s",
                 (hiveai_result, photodna_result, image_id))
     conn.commit()
+
+if __name__=="__main__":
+    #print(get_user_by_email("slepamacka@gmail.com"))
+    #location2 = {
+    #    "latitude": 40.7128,
+    #    "longitude": -74.0060,
+    #    "altitude": 1389  # in meters
+    #}
+    # image_id=create_image(user_id=13, image_url="desinger_pvc.png", status= "pending",
+    #             incident_time=None, reportee_name='Mike', reportee_ip_address='192.168.1.1',
+    #             username='bike1389', location=location)
+    #desinger_image=get_image_by_id(86)
+    #print(desinger_image)
+    #update_image(desinger_image.id, desinger_image.user_id, desinger_image.image_url, desinger_image.photodna_results, 
+    #            desinger_image.hiveai_results, desinger_image.status,
+    #            desinger_image.incident_time, desinger_image.reportee_name, desinger_image.reportee_ip_address, desinger_image.username, location2)
+    #print(get_image_by_id(86))

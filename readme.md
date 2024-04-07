@@ -155,3 +155,61 @@ This project is licensed under the MIT License.
 ## Contact
 
 For any inquiries or support, please raise an issue in the repository's issue tracker.
+
+
+## Uploading images
+
+/upload and /upload_images endpoints are used to upload images that are later going to be processed.
+
+/upload endpoint takes in the following input arguments 
+        'Email':               email of the user uploading the the image
+        'Password':            password of the user uploading the the image
+        'image':               base64 image data or in other words the content of the image
+        'metadata':            image metadata
+            --> metadata fields         'title': image title,
+                                        'extension': extension of the image ex. png jpg
+        'reportee_name':       reportee_name,
+        'reportee_ip_address': reportee_ip_address
+        'location': location
+            --> location fields
+                                "latitude":  latitude of where the image was taken
+                                "longitude": lognitude of where the image was taken
+                                "altitude":  altitude of where the image was taken
+
+/upload endpoint returns the following JSON response:
+    'status':         status of the request
+    'message':        message describing the ouctome of the upload request
+    'image_metadata': metadata of the uploaded images
+    'image_id':       image_id of the created image on the server
+
+/upload_images takes in the following input arguments
+
+            "Email":    email of the user uploading the the image
+            "Password": password of the user uploading the the image
+            "images":   a list of JSON objects
+                --> images fields:
+                                "image": base64 image data or in other words the content of the image
+                                "metadata": metadata
+                                    --> metadata fields
+                                          "title":      image title,
+                                          "extension":  extension of the image ex. png jpg
+                                'reportee_name': reportee_name,
+                                'reportee_ip_address': reportee_ip_address,
+                                'location': location
+                                     --> location fields
+                                     "latitude":  latitude of where the image was taken
+                                     "longitude": lognitude of where the image was taken
+                                     "altitude":  altitude of where the image was taken
+
+/upload_images endpoint returns the following object:
+
+    'images': a list of  JSON response objects used by /upload
+     
+
+The /status/<image_id> endpoint is used to view tha status of the uploaded image.
+
+/status endpoint returns a JSON with the following fields
+            "image_url": url of the image 
+            "status":    status of the image on the server for example "pending"
+            "photodna_results": photo dna result for the image
+            "hiveai_results":   hive ai result for the image

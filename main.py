@@ -280,40 +280,69 @@ def get_image_status(image_id):
         }),200
     else:
         return jsonify({"message": "No image with that id found."}), 404
-      
+
+
+def process_image(user_id, base64_image_data, metadata):
+    try:
+        scan_results = {"result": "none"}
+        status = "pending"
+
+        if base64_image_data and metadata:
+            image_decoded = base64.b64decode(base64_image_data)
+            file_extension = metadata.get("extension", "jpg")
+            file_name = f"{metadata['title'].replace(' ', '_')}.{file_extension}"
+            image_path = os.path.join("", file_name)
+
+            with open(image_path, "wb") as image_file:
+                image_file.write(image_decoded)
+                print(user_id, image_path, metadata, scan_results, status)
+
+                #image_id = db_handler.create_image(user_id, image_path, metadata, scan_results, status)
+                image_id="bla"
+                return {
+                    'status': 'success',
+                    'message': 'Image and metadata received',
+                    'image_metadata': metadata,
+                    'image_id': image_id
+                }
+        return {'status': 'error', 'message': 'Invalid or missing image data'}
+    
+    except Exception as e:
+        return {'status': 'error', 'message': str(e)}
+
+def get_user_from_token(token):
+   return db_handler.get_user_by_email("slepamacka@gmail.com")
+
+
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
   try:
-    access_token = request.headers.get('Authorization')
-    if not access_token:
-      return jsonify({
-        'status': 'error',
-        'message': 'Access token missing'
-      }), 401
-
-    if not token_valid(access_token):
-      return jsonify({
-        'status': 'error',
-        'message': 'Access token invalid'
-      }), 401
-    user_id = 1
-    scan_results = {"result": "none"}
-    status = "pending"
     data = request.get_json()
+    email = data.get('Email')
+    password = data.get('Password')
+    print(email)
+    user = db_handler.get_user_by_email(email)
+
+    if not (user and bcrypt.check_password_hash(user.password, password)):
+       return jsonify({'status': 'error', 'message': "User not found"}), 400
+   
     base64_image_data = data.get("image")
     metadata = data.get('metadata')
-    
+    reportee_name=data.get("reportee_name")
+    reportee_ip_address=data.get("reportee_ip_address")
+    location=data.get("location")
+   
     if base64_image_data and metadata:
       image_data = base64.b64decode(base64_image_data)
       file_extension = metadata.get("extension", "jpg")
       file_name = f"{metadata['title'].replace(' ', '_')}.{file_extension}"
-      image_path = os.path.join("", file_name)
+      image_path = os.path.join("static/img", file_name)
       
       with open(image_path, "wb") as image_file:
         image_file.write(image_data)
-        
-        image_id = db_handler.create_image(user_id, image_path, metadata,
-                                           scan_results, status)
+        image_id=db_handler.create_image(user_id=user.id, image_url=image_path, status="pending",
+             incident_time=None, reportee_name=reportee_name, reportee_ip_address=reportee_ip_address,
+             username=user.name, location=location)
 
     response = {
       'status': 'success',
@@ -326,6 +355,58 @@ def upload():
   except Exception as e:
     return jsonify({'status': 'error', 'message': str(e)}), 400
 
+
+
+@app.route('/upload_images', methods=['POST'])
+def upload_images():
+    #try:
+       data = request.get_json()
+       email = data.get('Email')
+       password = data.get('Password')
+       user = db_handler.get_user_by_email(email)
+
+       if not (user and bcrypt.check_password_hash(user.password, password)):
+          return jsonify({'status': 'error', 'message': "User not found"}), 400
+       if 'images' not in data or not isinstance(data['images'], list):
+            return jsonify({'status': 'error', 'message': 'Invalid or missing images data'}), 400
+        
+       image_responses = []
+       for image_data in data['images']:
+            base64_image_data = image_data.get("image")
+            metadata = image_data.get('metadata')
+            if base64_image_data and metadata:
+                image_base64_data = base64.b64decode(base64_image_data)
+            else:
+                return jsonify({'status': 'error', 'message': "One of the images has no metadata or no base61_image_data present"}), 400
+            reportee_name       =image_data.get("reportee_name")
+            reportee_ip_address =image_data.get("reportee_ip_address")
+            location            =image_data.get("location")
+            file_extension      = metadata.get("extension", "jpg")
+            file_name           = f"{metadata['title'].replace(' ', '_')}.{file_extension}"
+            print(file_name)
+            image_path = os.path.join("static/img", file_name)
+
+            with open(image_path, "wb") as image_file:
+              image_file.write(image_base64_data)
+              
+              image_id=db_handler.create_image(user_id=user.id, image_url=file_name, status="pending",
+              incident_time=None, reportee_name=reportee_name, reportee_ip_address=reportee_ip_address,
+              username=user.name, location=location)
+            
+            response = {
+                          'status': 'success',
+                          'message': 'Image and metadata received',
+                          'image_metadata': metadata,
+                          'image_id':image_id
+              }  
+            
+            image_responses.append(response)
+        
+       return jsonify({'images': image_responses}), 200
+    
+    #except Exception as e:
+    #    print(e)
+    #    return jsonify({'status': 'error', 'message': str(e)}), 400
 
 @app.errorhandler(404)
 def page_not_found(error):
@@ -426,11 +507,16 @@ app.jinja_env.filters['add_strong_tag'] = add_strong_tag
 @app.route('/update_or_create_image', methods=['POST'])
 def update_or_create_image():
     try:
+        email = request.form.get('Email')
+        password = request.form.get('Password')
+        user = db_handler.get_user_by_email(email)
+        if not (user and bcrypt.check_password_hash(user.password, password)):
+           return jsonify({'status': 'error', 'message': "User not found"}), 400
         data = request.json
         image_id = data.get('image_id')
         user_id = data.get('user_id')
         image_url = data.get('image_url')
-        scan_results = data.get('scan_results')
+        
         status = data.get('status')
         incident_time = data.get('incident_time')
         reportee_name = data.get('reportee_name')
@@ -439,15 +525,16 @@ def update_or_create_image():
         location = data.get('location')
 
         if image_id:
+            photodna_results = data.get('photodna_results')
+            hiveai_results=data.get("hiveai_results")
             # If image_id is provided, update the existing image
             db_handler.update_image(image_id, user_id, image_url,
-                          scan_results, status, incident_time,
+                           photodna_results, hiveai_results, status, incident_time,
                           reportee_name, reportee_ip_address,username, location)
         else:
-            # If no image_id is provided, create a new image
-            db_handler.create_image(user_id, image_url,
-                                         scan_results, status, incident_time,
-                                         reportee_name, reportee_ip_address,username,  location)
+            image_id=db_handler.create_image(user_id=user_id, image_url=image_url, status="pending",
+             incident_time=None, reportee_name=reportee_name, reportee_ip_address=reportee_ip_address,
+             username=username, location=location)
 
         return jsonify({'success': True, 'image_id': image_id})
 
