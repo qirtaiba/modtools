@@ -103,27 +103,27 @@ ModTools Image is available on Docker Hub as `qirtaiba/modtools`. You can get it
 7. Access the application at `http://localhost:8000`.
 
 ### Environment variables
+```
+    'SECRET_KEY':     create a secret key for your Flask app
+    'PHOTODNA_KEY':   PhotoDNA key, obtained from Microsoft
+    'x-user':         NCMEC reporting username, obtained from NCMEC
+    'x-pwd':          NCMEC reporting password, obtained from NCMEC
+    'HIVEAI_KEY':     your Hive AI key, obtained from Hive AI
+    'DATABASE_URL':   connection string to a database like neondb
+                      eg. postgres://[username]:[password]@[hostname]/[databasename]
+    'BASE_URL':       URL of your website where Modtools Image is hosted
+    'EMAIL_SENDER':   SMTP email sender 
+    'EMAIL_PASSWORD': SMTP email password
+```
 
-``SECRET_KEY``
-    Create a secret key for your Flask app  
-``PHOTODNA_KEY``
-    PhotoDNA key, obtained from Microsoft  
-``x-user``
-    NCMEC reporting username, obtained from NCMEC  
-``x-pwd``
-    NCMEC reporting password, obtained from NCMEC  
-``HIVEAI_KEY``
-    Your Hive AI key, obtained from Hive AI  
-``DATABASE_URL``
-    Connection string to a database like neondb  
-``BASE_URL``
-    URL of your website where Modtools Image is hosted  
-``EMAIL_SENDER``
-    SMTP email sender  
-``EMAIL_PASSWORD``
-    SMTP email password  
+### Obtaining the required configuration credentials
+
+* The PhotoDNA credentials can be acquired via https://www.microsoft.com/en-us/photodna/cloudservice.
+* To receive the NCMEC credentials for automated report functionality, write an email to espteam@ncmec.org to request the registration form.
 
 ## Usage
+
+### Web interface
 
 1. **Login/Register**: First, register as a new user or log in with existing credentials through the provided forms.
 
@@ -133,35 +133,12 @@ ModTools Image is available on Docker Hub as `qirtaiba/modtools`. You can get it
 
 4. **Administration** (for admin users): Manage users and invitations, activate or deactivate plugins and APIs.
 
-## Limitations
+### API interface
 
-Modtools Image is currently in the early stages of development. Many features are missing, undocumented, or incomplete. These include:
+``/upload`` and ``/upload_images`` endpoints are used to upload images that are later going to be processed.
 
-* Configuration options for the plugins and APIs are not implemented in the web interface.
-* The JSON API for submitting images and querying their status has not been implemented.
-* The email alerting plugin, intended to send email alerts when a specified scan result is received, has not been implemented.
-* Filtering based on the numerical value of HiveAI score has not been implemented.
-
-Further known limitations will be maintained as Issues in Github.
-
-## Contributing
-
-Contributions, issues, and feature requests are welcome! Feel free to check the issues page if you want to contribute.
-
-## License
-
-This project is licensed under the MIT License.
-
-## Contact
-
-For any inquiries or support, please raise an issue in the repository's issue tracker.
-
-
-## Uploading images
-
-/upload and /upload_images endpoints are used to upload images that are later going to be processed.
-
-/upload endpoint takes in the following input arguments 
+``/upload`` endpoint takes in the following input arguments 
+```
         'Email':               email of the user uploading the the image
         'Password':            password of the user uploading the the image
         'image':               base64 image data or in other words the content of the image
@@ -175,15 +152,18 @@ For any inquiries or support, please raise an issue in the repository's issue tr
                                 "latitude":  latitude of where the image was taken
                                 "longitude": lognitude of where the image was taken
                                 "altitude":  altitude of where the image was taken
+```
 
-/upload endpoint returns the following JSON response:
+``/upload`` endpoint returns the following JSON response:
+```
     'status':         status of the request
     'message':        message describing the ouctome of the upload request
     'image_metadata': metadata of the uploaded images
     'image_id':       image_id of the created image on the server
+```
 
-/upload_images takes in the following input arguments
-
+``/upload_images`` takes in the following input arguments
+```
             "Email":    email of the user uploading the the image
             "Password": password of the user uploading the the image
             "images":   a list of JSON objects
@@ -200,16 +180,41 @@ For any inquiries or support, please raise an issue in the repository's issue tr
                                      "latitude":  latitude of where the image was taken
                                      "longitude": lognitude of where the image was taken
                                      "altitude":  altitude of where the image was taken
+```
 
-/upload_images endpoint returns the following object:
-
+``/upload_images`` endpoint returns the following object:
+```
     'images': a list of  JSON response objects used by /upload
-     
+```  
 
-The /status/<image_id> endpoint is used to view tha status of the uploaded image.
+The ``/status/<image_id>`` endpoint is used to view tha status of the uploaded image.
 
-/status endpoint returns a JSON with the following fields
+``/status`` endpoint returns a JSON with the following fields
+```
             "image_url": url of the image 
             "status":    status of the image on the server for example "pending"
             "photodna_results": photo dna result for the image
             "hiveai_results":   hive ai result for the image
+```
+
+## Limitations
+
+Modtools Image is currently in the early stages of development. Many features are missing, undocumented, or incomplete. These include:
+
+* Configuration options for the plugins and APIs are not implemented in the web interface.
+* The email alerting plugin, intended to send email alerts when a specified scan result is received, has not been implemented.
+* Filtering based on the numerical value of HiveAI score has not been implemented.
+
+Further known limitations will be maintained as Issues in Github.
+
+## Contributing
+
+Contributions, issues, and feature requests are welcome! Feel free to check the issues page if you want to contribute.
+
+## License
+
+This project is licensed under the MIT License.
+
+## Contact
+
+For any inquiries or support, please raise an issue in the repository's issue tracker.
