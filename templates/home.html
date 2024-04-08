@@ -388,7 +388,7 @@ pip install -r requirements.txt
             <div class="code-block">
               <pre><code class="language-bash">
 docker pull qirtaiba/modtools
-docker run -p 7000:7000 -e ENV_VARIABLE_NAME=value modtools
+docker run -d --name modtools -p 8000:8000 -v $(pwd)/.env:/app/.env qirtaiba/modtools
                     </code></pre>
             </div>
             <!--//code-block-->
@@ -401,6 +401,34 @@ docker run -p 7000:7000 -e ENV_VARIABLE_NAME=value modtools
                   <a class="btn btn-cta-primary" href="https://github.com/qirtaiba/modtools" target="_blank">More on GitHub</a>
               </p>
           </div><!--//block-->
+
+          <div class="block">
+            <h3 class="sub-title text-center">Submitting an image for scanning</h3>
+            <div class="code-block">
+              <pre><code class="language-bash">
+curl -X POST \
+  -F "Email=example@email.com" \
+  -F "Password=yourpassword" \
+  -F "image=@/path/to/your/image.jpg" \
+  -F "metadata={\"title\":\"Example Title\", \"extension\":\"jpg\"}" \
+  -F "reportee_name=John Doe" \
+  -F "reportee_ip_address=192.168.1.1" \
+  -F "location={\"latitude\": 37.7749, \"longitude\": -122.4194, \"altitude\": 0}" \
+  http://example.com/upload
+                    </code></pre>
+            </div>
+            <!--//code-block-->
+          </div>
+
+          <div class="block">
+            <h3 class="sub-title text-center">Querying the status of an scanned image</h3>
+            <div class="code-block">
+              <pre><code class="language-bash">
+curl http://example.com/status/your_image_id
+                    </code></pre>
+            </div>
+            <!--//code-block-->
+          </div>
             
         </div>
         <!--//docs-inner-->
